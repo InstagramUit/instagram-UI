@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, SafeAreaView, FlatList } from "react-native";
-import { Grid, Badge } from "antd-mobile";
 import { FontAwesome5 } from "@expo/vector-icons";
 import API from "../../services/API.context";
-import Item from "antd-mobile/es/components/dropdown/item";
 import { useDispatch, useSelector } from "react-redux";
 import getPosts from "../../services/API.context";
+import { Grid } from "@ant-design/react-native";
 
 const api = new API();
 
@@ -20,7 +19,7 @@ const Home = () => {
 
   return (
     <SafeAreaView>
-      <Grid columns={2} style={styles.header}>
+      {/* <Grid columns={2} style={styles.header}>
         <Grid.Item>
           <Text>ahihi</Text>
         </Grid.Item>
@@ -29,7 +28,8 @@ const Home = () => {
             <FontAwesome5 name="bell" size={24} color="black" />
           </Badge>
         </Grid.Item>
-      </Grid>
+      </Grid> */}
+      {console.log("data1 :>> ", data1)}
 
       <FlatList
         style={styles.list__posts}
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
   list__posts: {
-    marginTop: "60px",
+    // marginTop: "60px",
   },
   item__post: {
     height: "100%",
