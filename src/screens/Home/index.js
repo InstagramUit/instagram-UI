@@ -39,6 +39,7 @@ const Home = () => {
         )}
         keyExtractor={(item, index) => index.toString()}
       />
+      <Text>hieunguyen</Text>
       {/* {data.map((post) => {
         return (
           <View>
@@ -54,16 +55,16 @@ export default Home;
 
 const styles = StyleSheet.create({
   header: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 999,
+    // position: "fixed",
+    // top: 0,
+    // left: 0,
+    // right: 0,
+    // zIndex: 999,
     display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "16px",
-    backgroundColor: "#fff",
+    // justifyContent: "space-between",
+    // alignItems: "center",
+    // padding: "16px",
+    // backgroundColor: "#fff",
   },
   header__right: {
     textAlign: "right",
