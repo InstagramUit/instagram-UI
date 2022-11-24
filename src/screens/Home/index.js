@@ -12,9 +12,10 @@ const Home = () => {
             setData(json);
         } catch (error) {
             console.error(error);
-        } finally {
-            setLoading(false);
         }
+        // } finally {
+        //     setLoading(false);
+        // }
     }
 
     useEffect(() => {
