@@ -241,14 +241,6 @@ const Profile = ({ navigation }) => {
             uri: "https://vtv1.mediacdn.vn/zoom/700_438/2020/6/10/5aedc4ae46ab8-sehun-1-600x450-15917615965621479454230.jpg",
           }}
         />
-        {/* <Button
-          style={styles.setting}
-          onPress={() => {
-            console.log("test :>> ", test);
-            navigation.navigate("ProfileSetting");
-          }}
-          children={<AntDesign name="setting" size={24} color="black" />}
-        ></Button> */}
         <TouchableOpacity
           style={styles.setting}
           onPress={() => {
@@ -315,7 +307,7 @@ const Profile = ({ navigation }) => {
         {DATA.map((item) => {
           if (item.urls[0].type == "image") {
             return (
-              <View
+              <TouchableOpacity
                 style={{
                   width: 160,
                   height: 160,
@@ -333,11 +325,11 @@ const Profile = ({ navigation }) => {
                     uri: item.urls[0].url,
                   }}
                 />
-              </View>
+              </TouchableOpacity>
             );
           } else if (item.urls[0].type == "video") {
             return (
-              <View
+              <TouchableOpacity
                 style={{
                   width: 160,
                   height: 160,
@@ -363,7 +355,7 @@ const Profile = ({ navigation }) => {
                   isLooping
                   shouldRasterizeIOS={true}
                 />
-              </View>
+              </TouchableOpacity>
             );
           }
         })}

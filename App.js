@@ -100,7 +100,7 @@ const MainScreen = () => {
         name="ProfileScreen"
         component={ProfileScreen}
         options={{
-          header: undefined,
+          headerTitle: "Profile",
           tabBarLabel: "",
           tabBarIcon: (tabInfo) => {
             return (
@@ -128,20 +128,8 @@ const ProfileScreen = () => {
         headerShown: false,
       }}
     >
-      <Stack.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          title: "Profile",
-        }}
-      />
-      <Stack.Screen
-        name="ProfileSetting"
-        component={ProfileSetting}
-        options={{
-          title: "Profile Setting",
-        }}
-      />
+      <Stack.Screen name="ProfileSetting" component={ProfileSetting} />
+      <Stack.Screen name="Profile" component={Profile} />
     </Stack.Navigator>
   );
 };
