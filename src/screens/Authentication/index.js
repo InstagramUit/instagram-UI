@@ -10,9 +10,17 @@ import {
 } from "react-native";
 import { Button } from "react-native-ios-kit";
 import Header from "../../components/Header";
+import API from "../../services/API.context";
+
+const api = new API();
 const Authentication = ({ navigation }) => {
   const [active, setActive] = useState(true);
 
+  const handleLogin = () => {
+    api
+      .UserLogin("bibi030301@gmail.com", "123123")
+      .then((res) => console.log("res >> ", res));
+  };
   return (
     <SafeAreaView style={{ height: "100%", backgroundColor: "#fff" }}>
       <Header />
@@ -90,11 +98,12 @@ const Authentication = ({ navigation }) => {
             <View style={{ marginTop: 24 }}>
               <Button
                 style={styles.btn}
-                onPress={() => {
-                  navigation.navigate("MainScreen", {
-                    screen: "Home",
-                  });
-                }}
+                onPress={handleLogin}
+                // onPress={() => {
+                //   navigation.navigate("MainScreen", {
+                //     screen: "Home",
+                //   });
+                // }}
                 children={
                   <Text style={[styles.btn_text, { letterSpacing: 1 }]}>
                     Sign In
