@@ -8,7 +8,8 @@ import {
   ScrollView,
 } from "react-native";
 import Header from "../../components/Header";
-import PostItem from "../../components/PostItem";
+import Post from "./components/Post";
+
 
 const Home = () => {
   const [DATA, setData] = useState([
@@ -136,7 +137,7 @@ const Home = () => {
         data={DATA}
         pagingEnabled
         renderItem={(item) => {
-          return <PostItem props={item.item} />;
+          return <Post props={item.item} />;
         }}
         keyExtractor={(item) => item.id}
       />

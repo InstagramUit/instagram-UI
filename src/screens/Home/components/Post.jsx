@@ -9,7 +9,7 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { Video } from "expo-av";
 
-const PostItem = ({ props }) => {
+const Post = ({ props }) => {
   const windowHeight = Dimensions.get("screen").height;
   const bottomTabHeight = useBottomTabBarHeight();
   const headerHeight = useHeaderHeight();
@@ -164,4 +164,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PostItem;
+export default Post;
