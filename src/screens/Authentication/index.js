@@ -20,6 +20,10 @@ const Authentication = ({ navigation }) => {
     api
       .UserLogin("bibi030301@gmail.com", "123123")
       .then((res) => console.log("res >> ", res));
+
+    navigation.navigate("MainScreen", {
+      screen: "Home",
+    });
   };
   return (
     <SafeAreaView style={{ height: "100%", backgroundColor: "#fff" }}>
@@ -234,7 +238,6 @@ const styles = StyleSheet.create({
   },
   input: {
     width: "100%",
-    height: "100%",
     paddingVertical: 12,
     paddingHorizontal: 16,
     fontWeight: "400",

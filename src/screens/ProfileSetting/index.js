@@ -204,7 +204,6 @@ const styles = StyleSheet.create({
   },
   input: {
     width: "100%",
-    height: "100%",
     paddingVertical: 12,
     paddingHorizontal: 16,
     fontWeight: "400",
