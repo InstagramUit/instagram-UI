@@ -245,7 +245,9 @@ const Profile = ({ navigation }) => {
           style={styles.setting}
           onPress={() => {
             console.log("test :>> ", test);
-            navigation.navigate("ProfileSetting");
+            navigation.navigate("ProfileSetting", {
+              screen: "ProfileSetting",
+            });
           }}
         >
           <AntDesign name="setting" size={24} color="black" />

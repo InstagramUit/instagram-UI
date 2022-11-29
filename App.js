@@ -97,8 +97,8 @@ const MainScreen = () => {
         }}
       />
       <Tabs.Screen
-        name="ProfileScreen"
-        component={ProfileScreen}
+        name="Profile"
+        component={Profile}
         options={{
           headerTitle: "Profile",
           tabBarLabel: "",
@@ -118,19 +118,6 @@ const MainScreen = () => {
         }}
       />
     </Tabs.Navigator>
-  );
-};
-
-const ProfileScreen = () => {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="ProfileSetting" component={ProfileSetting} />
-      <Stack.Screen name="Profile" component={Profile} />
-    </Stack.Navigator>
   );
 };
 

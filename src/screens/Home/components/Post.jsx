@@ -30,7 +30,10 @@ const Post = ({ props }) => {
       <PageControlView
         defaultPage={1}
         style={{ width: "100%", height: "100%", display: "flex" }}
-        containerStyle={{ height: "100%" }}
+        containerStyle={{
+          width: "100%",
+          height: windowHeight - bottomTabHeight - headerHeight,
+        }}
       >
         {props.urls.map((item) => {
           if (item.type == "image") {
