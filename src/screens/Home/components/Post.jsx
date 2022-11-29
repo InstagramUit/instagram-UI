@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { View, Image, StyleSheet, Text, TouchableOpacity, Alert } from "react-native";
 import { PageControlView } from "react-native-ios-kit";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
@@ -8,20 +8,45 @@ import { Dimensions } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { Video } from "expo-av";
-
+import { useDispatch, useSelector } from "react-redux";
+import ApiContext from "../../../contexts/api.context";
 const Post = (props) => {
+    // redux
+    const user = useSelector(state => state.user)
+    // props, state
+    const api = new ApiContext()
     const { post } = props
-    console.log(post);
+    const ref = useRef(null);
     const windowHeight = Dimensions.get("screen").height;
     const bottomTabHeight = useBottomTabBarHeight();
     const headerHeight = useHeaderHeight();
 
     const [like, setLike] = useState(false);
+    const [totalLikes, setTotalLikes] = useState(post.totalLikes)
+    const [follow, setFollow] = useState(false)
+    const handleFollow = () => {
 
-    const ref = useRef(null);
-    useEffect(()=>{
-// let isLike = 
-    },[])
+    }
+    const handleLike = () => {
+        try {
+            let newLike = !like
+            api.setLikePost(post.id, newLike)
+                .then(res => {
+                    console.log('thay doi like thanh cong.');
+                    setLike(newLike)
+                    setTotalLikes(newLike ? Number(totalLikes) + 1 : Number(totalLikes) - 1)
+                })
+        } catch (error) {
+            console.log(error);
+            Alert.alert('Có lỗi xảy ra.')
+        }
+    }
+
+    useEffect(() => {
+        let isLike = post.likes.some(like => like.id_user == user.id)
+        setLike(isLike)
+        setFollow(post.follow)
+    }, [])
     return (
         <View
             style={{
@@ -116,7 +141,7 @@ const Post = (props) => {
                             uri: post.avatar || "https://res.cloudinary.com/dhz4hr8dq/image/upload/v1669695868/images_xigv3c.jpg",
                         }}
                     />
-                    {/* <Button
+                    <Button
                         style={{
                             position: "absolute",
                             left: 16,
@@ -124,21 +149,21 @@ const Post = (props) => {
                             paddingVertical: 1,
                             paddingHorizontal: 2,
                             borderRadius: 12,
-                            backgroundColor: "#0D8BE7",
+                            backgroundColor: follow ? 'blue' : 'red',
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
                         }}
-                        onPress={() => { }}
+                        onPress={handleFollow}
                     >
-                        <AntDesign name="plus" size={14} color="white" />
-                    </Button> */}
+                        <AntDesign name={follow ? 'check' : 'plus'} size={14} color="white" />
+                    </Button>
                 </View>
                 <View style={{ marginTop: 16 }}>
                     <TouchableOpacity onPress={handleLike}>
                         <AntDesign name="heart" size={24} color={like ? "red" : "white"} />
                     </TouchableOpacity>
-                    <Text style={{ color: 'white' }}>{post.totalLikes}</Text>
+                    <Text style={{ color: 'white' }}>{totalLikes}</Text>
                 </View>
                 <View style={{ marginTop: 16 }}>
                     <AntDesign name="message1" size={24} color="white" />

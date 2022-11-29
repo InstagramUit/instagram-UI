@@ -12,8 +12,14 @@ import {
 import { Button } from "react-native-ios-kit";
 import ApiContext from "../../../contexts/api.context";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from "react-redux";
+import { updateInfoUser } from "../../../features/user";
 
 const SignIn = (props) => {
+    // redux
+    const user = useSelector(state => state.user)
+    const dispatch = useDispatch();
+    // props
     const { navigation } = props
     const api = new ApiContext()
     const [auth, setAuth] = useState({
@@ -29,9 +35,11 @@ const SignIn = (props) => {
     }
     const handleLogin = async () => {
         try {
-            console.log(auth);
+            // console.log(auth);
             let result = await api.login(auth)
-            await AsyncStorage.setItem('access-token', result.accessToken)
+            let user = result.user
+            dispatch(updateInfoUser(user))
+            await AsyncStorage.setItem('access-token', user.accessToken)
             Alert.alert('Đăng nhập thành công')
             navigation.navigate("MainScreen", {
                 screen: "Home",

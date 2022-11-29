@@ -7,16 +7,22 @@ export default class ApiContext {
         const response = api.post('/login', data);
         return response;
     }
-    async signUp(data){
+    async signUp(data) {
         const response = api.post('/sign-up', data);
         return response;
     }
-    async getPosts(){
+    async getPosts() {
         const value = await AsyncStorage.getItem('access-token')
         console.log(value);
-        api.defaults.headers.Authorization =`Bearer ${value}`
+        api.defaults.headers.Authorization = `Bearer ${value}`
         const response = api.get('/posts');
         return response;
     }
- 
+    async setLikePost(id_post, isLike) {
+        const value = await AsyncStorage.getItem('access-token')
+        console.log(value);
+        api.defaults.headers.Authorization = `Bearer ${value}`
+        const response = api.put(`/posts/like/${id_post}`,{isLike});
+        return response;
+    }
 }

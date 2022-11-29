@@ -7,6 +7,9 @@ import ProfileSetting from "../screens/ProfileSetting";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons } from "@expo/vector-icons";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { StyleSheet, Text, View, Image } from "react-native";
+import logo from "../../assets/logo.jpg";
 
 
 const Stack = createNativeStackNavigator();
