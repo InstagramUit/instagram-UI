@@ -53,10 +53,10 @@ const NewPost = () => {
             color: '#0D8BE7',
           }}>Next</Text>
       </View>
-      <Image
+      {/* <Image
         style={styles.stretch}
         source={require("../../storage/images/cover.png")}>
-      </Image>
+      </Image> */}
       <View 
       style={{
         justifyContent:'center',
