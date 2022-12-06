@@ -1,5 +1,5 @@
 import * as React from "react";
-import './src/config/global.config'
+import "./src/config/global.config";
 import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, View, Image } from "react-native";
@@ -12,30 +12,28 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeProvider } from "react-native-ios-kit";
 import logo from "./assets/logo.jpg";
 import MainLayout from "./src/layout/MainLayout";
-import store from './store';
-import { Provider } from 'react-redux';
+import store from "./store";
+import { Provider } from "react-redux";
 
 const Stack = createNativeStackNavigator();
 const AuthStack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
 
 export default function App() {
-
-    return (
-        <ThemeProvider>
-            <Provider store={store}>
-                <NavigationContainer>
-                    <Stack.Navigator
-                        screenOptions={{
-                            headerShown: false,
-                        }}
-                    >
-                        <Stack.Screen name="Authentication" component={Authentication} />
-                        <Stack.Screen name="MainScreen" component={MainLayout} />
-                    </Stack.Navigator>
-                </NavigationContainer>
-            </Provider>
-        </ThemeProvider>
-    );
+  return (
+    <ThemeProvider>
+      <Provider store={store}>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen name="Authentication" component={Authentication} />
+            <Stack.Screen name="MainScreen" component={MainLayout} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
+    </ThemeProvider>
+  );
 }
-

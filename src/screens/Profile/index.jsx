@@ -241,19 +241,23 @@ const Profile = ({ navigation }) => {
             uri: "https://vtv1.mediacdn.vn/zoom/700_438/2020/6/10/5aedc4ae46ab8-sehun-1-600x450-15917615965621479454230.jpg",
           }}
         />
-        <TouchableOpacity
-          style={styles.setting}
-          onPress={() => {
-            console.log("test :>> ", test);
-            navigation.navigate("ProfileSetting", {
-              screen: "ProfileSetting",
-            });
-          }}
-        >
-          <AntDesign name="setting" size={24} color="black" />
-        </TouchableOpacity>
+        <View style={styles.setting}>
+          <AntDesign
+            name="setting"
+            size={24}
+            color="black"
+            onPress={() => {
+              navigation.navigate("ProfileSetting");
+            }}
+          />
+        </View>
         <View style={styles.info_container}>
-          <View style={{ marginBottom: 16 }}>
+          <View
+            style={{
+              alignItems: "center",
+              marginBottom: 16,
+            }}
+          >
             <Image
               style={{
                 width: 80,
@@ -414,5 +418,6 @@ const styles = StyleSheet.create({
     right: 16,
     width: 24,
     height: 24,
+    zIndex: 99999,
   },
 });

@@ -196,6 +196,8 @@ const Post = (props) => {
             showModal={showModal}
             setShowModal={setShowModal}
             onTouchOutside={handleCloseModal}
+            comments={post.comments}
+            userAvt = {post.avatar}
           />
         </View>
         <View style={{ marginTop: 16 }}>
