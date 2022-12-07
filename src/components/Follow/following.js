@@ -34,12 +34,13 @@ const FollowingScreen = () => {
       <View>
         <Button
             style={{
-                backgroundColor: '#0D8BE7',
-                color: '#000000',
+                backgroundColor: '#000000',
+                color: '#808080',
                 borderRadius: 8,
+                border: '#808080',
             }}
             >
-                Follow
+                Unfollow
         </Button>
       </View>
     </View>
