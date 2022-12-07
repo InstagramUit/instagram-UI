@@ -1,40 +1,47 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  Modal,
-  TouchableWithoutFeedback,
-  Dimensions,
-  Image,
-  TextInput,
-  ScrollView,
-} from "react-native";
+import { View, Text, Modal, TouchableWithoutFeedback, Dimensions, Image, TextInput, ScrollView } from "react-native";
 import { Feather } from "@expo/vector-icons";
-
-const CommentModal = ({
-  showModal,
-  setShowModal,
-  onTouchOutside,
-  comments,
-  userAvt,
-}) => {
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import ApiContext from "../../contexts/api.context";
+const CommentModal = (props) => {
+  const { showModal, setShowModal, onTouchOutside, userAvt, post } = props;
+  const windowHeight = Dimensions.get("window").height;
   const renderOutsideTouchable = (onTouchOutside) => {
     const view = <View style={{ flex: 1, width: "100%" }} />;
     if (!onTouchOutside) return view;
-
     return (
-      <TouchableWithoutFeedback
-        onPress={onTouchOutside}
-        style={{ flex: 1, width: "100%" }}
-      >
+      <TouchableWithoutFeedback onPress={onTouchOutside} style={{ flex: 1, width: "100%" }}>
         {view}
       </TouchableWithoutFeedback>
     );
   };
+  // render comments
+  const api = new ApiContext()
+  const user = useSelector((state) => state.user);
+  const [comments, setComments] = useState(props.comments);
+  const [content, setContent] = useState("");
+  const handleComment = () => {
+    let data = {
+      id_post: post.id,
+      content,
+    };
+    console.log(data);
+    api.createCommentPost(data)
+    .then(res=>{
+      let newComments = {
+        avatar:user.avatar,
+        display_name:user.display_name,
+        content:data.content,
+      }
+      setComments(preComments => [...preComments,newComments])
+      setContent('')
+    })
 
-  const windowHeight = Dimensions.get("window").height;
-
-  console.log(userAvt);
+  };
+  useEffect(() => {
+    console.log(user);
+  }, []);
   return (
     <Modal
       animationType={"fade"}
@@ -77,7 +84,7 @@ const CommentModal = ({
               Comments
             </Text>
 
-            {comments ? (
+            {Array.isArray(comments)&& comments.length>0 ? (
               <ScrollView style={{ width: "100%", height: "100%" }}>
                 {comments.map((item) => {
                   return (
@@ -97,7 +104,7 @@ const CommentModal = ({
                           borderColor: "#ccc",
                           marginRight: 16,
                         }}
-                        source={item.avt}
+                        source={item.avatar}
                       />
                       <View
                         style={{
@@ -113,7 +120,7 @@ const CommentModal = ({
                             color: "#000",
                           }}
                         >
-                          {item.name}
+                          {item.display_name}
                         </Text>
                         <Text
                           style={{
@@ -122,7 +129,7 @@ const CommentModal = ({
                             color: "#797979",
                           }}
                         >
-                          {item.comment}
+                          {item.content}
                         </Text>
                       </View>
                     </View>
@@ -161,9 +168,7 @@ const CommentModal = ({
           <Image
             style={{ width: 36, height: 36, borderRadius: 16, marginRight: 16 }}
             source={{
-              uri:
-                userAvt ||
-                "https://res.cloudinary.com/dhz4hr8dq/image/upload/v1669695868/images_xigv3c.jpg",
+              uri: userAvt || "https://res.cloudinary.com/dhz4hr8dq/image/upload/v1669695868/images_xigv3c.jpg",
             }}
           />
           <View
@@ -181,11 +186,8 @@ const CommentModal = ({
               flex: 1,
             }}
           >
-            <TextInput
-              style={{ width: "100%", fontSize: 16 }}
-              placeholder="Add comment"
-            />
-            <TouchableWithoutFeedback>
+            <TextInput style={{ width: "100%", fontSize: 16 }} placeholder="Add comment" value={content} onChange={(e) => setContent(e.nativeEvent.text)} />
+            <TouchableWithoutFeedback onPress={handleComment}>
               <Feather name="send" size={24} color="black" />
             </TouchableWithoutFeedback>
           </View>

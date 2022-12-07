@@ -198,6 +198,7 @@ const Post = (props) => {
             onTouchOutside={handleCloseModal}
             comments={post.comments}
             userAvt = {post.avatar}
+            post={post}
           />
         </View>
         <View style={{ marginTop: 16 }}>

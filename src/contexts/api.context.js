@@ -25,4 +25,11 @@ export default class ApiContext {
         const response = api.put(`/posts/like/${id_post}`,{isLike});
         return response;
     }
+    async createCommentPost(data){
+        const value = await AsyncStorage.getItem('access-token')
+        console.log(value);
+        api.defaults.headers.Authorization = `Bearer ${value}`
+        const response = api.post(`/comments`,data);
+        return response;
+    }
 }
