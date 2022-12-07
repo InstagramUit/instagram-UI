@@ -3,6 +3,18 @@ import React from 'react'
 
 const FollowersScreen = () => {
   return (
+    <SafeAreaView>
+      <FollowersItem />
+      <FollowersItem />
+      <FollowersItem />
+      <FollowersItem />
+    </SafeAreaView>
+  );
+};
+export default FollowersScreen
+
+const FollowersItem = () => {
+  return (
     <View
       style={{
         display: "flex",
@@ -44,5 +56,3 @@ const FollowersScreen = () => {
     </View>
   )
 }
-
-export default FollowersScreen

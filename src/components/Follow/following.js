@@ -4,6 +4,18 @@ import { Button } from 'react-native-ios-kit'
 
 const FollowingScreen = () => {
   return (
+    <SafeAreaView>
+      <FollowingItem />
+      <FollowingItem />
+      <FollowingItem />
+      <FollowingItem />
+    </SafeAreaView>
+  );
+};
+export default FollowingScreen;
+
+const FollowingItem = () => {
+  return (
     <View
       style={{
         display: "flex",
@@ -46,5 +58,3 @@ const FollowingScreen = () => {
     </View>
   )
 }
-
-export default FollowingScreen
