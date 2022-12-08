@@ -34,6 +34,7 @@ const Post = (props) => {
 
   const [like, setLike] = useState(false);
   const [totalLikes, setTotalLikes] = useState(post.totalLikes);
+  const [totalComments, setTotalComments] = useState(post.totalComments);
   const [follow, setFollow] = useState(false);
   const handleFollow = () => {};
   const handleLike = () => {
@@ -187,10 +188,11 @@ const Post = (props) => {
           </TouchableOpacity>
           <Text style={{ color: "white" }}>{totalLikes}</Text>
         </View>
-        <View style={{ marginTop: 16 }}>
+        <View style={{ display: "flex", alignItems: "center", marginTop: 16 }}>
           <TouchableWithoutFeedback onPress={handleShowModal}>
             <AntDesign name="message1" size={24} color="white" />
           </TouchableWithoutFeedback>
+          <Text style={{ color: "white" }}>{totalComments}</Text>
           <CommentModal
             showModal={showModal}
             setShowModal={setShowModal}
@@ -221,7 +223,7 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   description: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "400",
     color: "#fff",
     marginTop: 8,

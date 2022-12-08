@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Button, Image, View, StyleSheet, SafeAreaView } from "react-native";
+import {
+  Image,
+  View,
+  StyleSheet,
+  SafeAreaView,
+  Text,
+  TextInput,
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { PageControlView } from "react-native-ios-kit";
 import { Dimensions } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useHeaderHeight } from "@react-navigation/elements";
-import deafultImage from "../../../assets/default-thumbnail.jpg";
+import { Button } from "react-native-ios-kit";
 
 const NewPost = () => {
   const windowHeight = Dimensions.get("screen").height;
@@ -29,7 +36,7 @@ const NewPost = () => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ height: "100%", backgroundColor: "#fff" }}>
       {/* {images.map((item) => {
         return (
           <Image
@@ -90,7 +97,55 @@ const NewPost = () => {
           source={require("../../../assets/default-thumbnail.jpg")}
         />
       )}
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
+      <View style={{ margin: 24 }}>
+        <Button
+          style={styles.btn}
+          onPress={pickImage}
+          children={
+            <Text style={[styles.btn_text, { letterSpacing: 1 }]}>
+              Pick an image from camera roll
+            </Text>
+          }
+        ></Button>
+      </View>
+      {/* <Button title="Pick an image from camera roll" onPress={pickImage} /> */}
+      <TextInput
+        placeholder="Description"
+        multiline={true}
+        numberOfLines={5}
+        onChangeText={(text) => {
+          console.log(text);
+        }}
+        style={{
+          fontSize: 18,
+          fontWeight: "400",
+          padding: 16,
+          borderBottomWidth: 1,
+          borderBottomColor: "#ccc",
+          marginBottom: 8,
+        }}
+      />
+      <Text
+        style={{
+          fontSize: 16,
+          fontWeight: "400",
+          marginHorizontal: 16,
+          color: "#797979",
+        }}
+      >
+        Your followers can see your posts in their feeds and on your profile.
+      </Text>
+      <View style={{ margin: 24 }}>
+        <Button
+          style={styles.btn}
+          onPress={() => {
+            console.log("Click");
+          }}
+          children={
+            <Text style={[styles.btn_text, { letterSpacing: 1 }]}>Post</Text>
+          }
+        ></Button>
+      </View>
     </SafeAreaView>
   );
 };
@@ -103,5 +158,21 @@ const styles = StyleSheet.create({
     height: "100%",
     resizeMode: "fill",
     resizeMethod: "scale",
+  },
+  btn: {
+    width: "100%",
+    borderRadius: 24,
+    padding: 16,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    backgroundColor: "#0D8BE7",
+    color: "#ffffff",
+  },
+  btn_text: {
+    fontWeight: "500",
+    fontSize: 16,
+    color: "#ffffff",
   },
 });
