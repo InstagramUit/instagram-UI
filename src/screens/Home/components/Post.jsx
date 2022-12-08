@@ -60,7 +60,6 @@ const Post = (props) => {
 
   const [showModal, setShowModal] = useState(false);
   const handleShowModal = () => {
-    console.log("test");
     setShowModal(true);
   };
   const handleCloseModal = () => {
@@ -142,7 +141,7 @@ const Post = (props) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          gap: 16,
+          // gap: 16,
         }}
       >
         <View>
@@ -182,7 +181,7 @@ const Post = (props) => {
             />
           </Button>
         </View>
-        <View style={{ marginTop: 16 }}>
+        <View style={{ display: "flex", alignItems: "center", marginTop: 16 }}>
           <TouchableOpacity onPress={handleLike}>
             <AntDesign name="heart" size={24} color={like ? "red" : "white"} />
           </TouchableOpacity>
@@ -197,7 +196,7 @@ const Post = (props) => {
             setShowModal={setShowModal}
             onTouchOutside={handleCloseModal}
             comments={post.comments}
-            userAvt = {post.avatar}
+            userAvt={post.avatar}
             post={post}
           />
         </View>

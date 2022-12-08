@@ -5,6 +5,7 @@ import { PageControlView } from "react-native-ios-kit";
 import { Dimensions } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useHeaderHeight } from "@react-navigation/elements";
+import deafultImage from "../../../assets/default-thumbnail.jpg";
 
 const NewPost = () => {
   const windowHeight = Dimensions.get("screen").height;
@@ -17,9 +18,6 @@ const NewPost = () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsMultipleSelection: true,
-      // allowsEditing: true,
-      // aspect: [4, 3],
-      // quality: 5,
       selectionLimit: 5,
     });
 
@@ -32,8 +30,6 @@ const NewPost = () => {
 
   return (
     <SafeAreaView>
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
-
       {/* {images.map((item) => {
         return (
           <Image
@@ -42,49 +38,59 @@ const NewPost = () => {
           />
         );
       })} */}
-      <PageControlView
-        defaultPage={1}
-        style={{ display: "flex" }}
-        containerStyle={{
-          width: "100%",
-          height: windowHeight - headerHeight - bottomTabHeight,
-        }}
-      >
-        {images.map((item) => {
-          // if (item.type == "image") {
-          return (
-            <Image
-              style={{ height: "100%" }}
-              resizeMethod="scale"
-              resizeMode="cover"
-              source={{
-                uri: item.uri,
-              }}
-            />
-          );
-          // } else if (item.type == "video") {
-          //   return (
-          //     <Video
-          //       ref={ref}
-          //       style={{
-          //         width: "100%",
-          //         height: "100%",
-          //         justifyContent: "center",
-          //       }}
-          //       resizeMethod="scale"
-          //       resizeMode="contain"
-          //       shouldPlay
-          //       source={{
-          //         uri: item.url,
-          //       }}
-          //       videoStyle={{ position: "relative" }}
-          //       isLooping
-          //       shouldRasterizeIOS={true}
-          //     />
-          //   );
-          // }
-        })}
-      </PageControlView>
+      {images.length > 0 ? (
+        <PageControlView
+          defaultPage={1}
+          style={{ display: "flex" }}
+          containerStyle={{
+            width: "100%",
+            height: 300,
+          }}
+        >
+          {images.map((item) => {
+            // if (item.type == "image") {
+            return (
+              <Image
+                style={{ height: "100%" }}
+                resizeMethod="scale"
+                resizeMode="cover"
+                source={{
+                  uri: item.uri,
+                }}
+              />
+            );
+            // } else if (item.type == "video") {
+            //   return (
+            //     <Video
+            //       ref={ref}
+            //       style={{
+            //         width: "100%",
+            //         height: "100%",
+            //         justifyContent: "center",
+            //       }}
+            //       resizeMethod="scale"
+            //       resizeMode="contain"
+            //       shouldPlay
+            //       source={{
+            //         uri: item.url,
+            //       }}
+            //       videoStyle={{ position: "relative" }}
+            //       isLooping
+            //       shouldRasterizeIOS={true}
+            //     />
+            //   );
+            // }
+          })}
+        </PageControlView>
+      ) : (
+        <Image
+          style={{ width: "100%", height: 300 }}
+          resizeMethod="scale"
+          resizeMode="cover"
+          source={require("../../../assets/default-thumbnail.jpg")}
+        />
+      )}
+      <Button title="Pick an image from camera roll" onPress={pickImage} />
     </SafeAreaView>
   );
 };

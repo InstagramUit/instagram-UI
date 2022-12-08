@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, Modal, TouchableWithoutFeedback, Dimensions, Image, TextInput, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  Modal,
+  TouchableWithoutFeedback,
+  Dimensions,
+  Image,
+  TextInput,
+  ScrollView,
+} from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -11,15 +20,19 @@ const CommentModal = (props) => {
     const view = <View style={{ flex: 1, width: "100%" }} />;
     if (!onTouchOutside) return view;
     return (
-      <TouchableWithoutFeedback onPress={onTouchOutside} style={{ flex: 1, width: "100%" }}>
+      <TouchableWithoutFeedback
+        onPress={onTouchOutside}
+        style={{ flex: 1, width: "100%" }}
+      >
         {view}
       </TouchableWithoutFeedback>
     );
   };
   // render comments
-  const api = new ApiContext()
+  const api = new ApiContext();
   const user = useSelector((state) => state.user);
   const [comments, setComments] = useState(props.comments);
+
   const [content, setContent] = useState("");
   const handleComment = () => {
     let data = {
@@ -27,17 +40,15 @@ const CommentModal = (props) => {
       content,
     };
     console.log(data);
-    api.createCommentPost(data)
-    .then(res=>{
+    api.createCommentPost(data).then((res) => {
       let newComments = {
-        avatar:user.avatar,
-        display_name:user.display_name,
-        content:data.content,
-      }
-      setComments(preComments => [...preComments,newComments])
-      setContent('')
-    })
-
+        avatar: user.avatar,
+        display_name: user.display_name,
+        content: data.content,
+      };
+      setComments((preComments) => [...preComments, newComments]);
+      setContent("");
+    });
   };
   useEffect(() => {
     console.log(user);
@@ -66,9 +77,9 @@ const CommentModal = (props) => {
             width: "100%",
             borderTopRightRadius: 10,
             borderTopLeftRadius: 10,
-            paddingHorizontal: 10,
-            minHeight: windowHeight * 0.5,
-            paddingBottom: 60,
+            paddingHorizontal: 24,
+            maxHeight: windowHeight * 0.5,
+            paddingBottom: 80,
           }}
         >
           <View style={{ height: "100%" }}>
@@ -84,9 +95,9 @@ const CommentModal = (props) => {
               Comments
             </Text>
 
-            {Array.isArray(comments)&& comments.length>0 ? (
+            {Array.isArray(comments) && comments.length > 0 ? (
               <ScrollView style={{ width: "100%", height: "100%" }}>
-                {comments.map((item) => {
+                {comments.map((item, index) => {
                   return (
                     <View
                       style={{
@@ -94,7 +105,9 @@ const CommentModal = (props) => {
                         flexDirection: "row",
                         alignItems: "flex-start",
                         justifyContent: "center",
+                        marginVertical: 16,
                       }}
+                      key={index}
                     >
                       <Image
                         style={{
@@ -110,7 +123,7 @@ const CommentModal = (props) => {
                         style={{
                           display: "flex",
                           flexDirection: "column",
-                          width: "100%",
+                          flex: 1,
                         }}
                       >
                         <Text
@@ -168,7 +181,9 @@ const CommentModal = (props) => {
           <Image
             style={{ width: 36, height: 36, borderRadius: 16, marginRight: 16 }}
             source={{
-              uri: userAvt || "https://res.cloudinary.com/dhz4hr8dq/image/upload/v1669695868/images_xigv3c.jpg",
+              uri:
+                userAvt ||
+                "https://res.cloudinary.com/dhz4hr8dq/image/upload/v1669695868/images_xigv3c.jpg",
             }}
           />
           <View
@@ -186,7 +201,12 @@ const CommentModal = (props) => {
               flex: 1,
             }}
           >
-            <TextInput style={{ width: "100%", fontSize: 16 }} placeholder="Add comment" value={content} onChange={(e) => setContent(e.nativeEvent.text)} />
+            <TextInput
+              style={{ fontSize: 16 }}
+              placeholder="Add comment"
+              value={content}
+              onChange={(e) => setContent(e.nativeEvent.text)}
+            />
             <TouchableWithoutFeedback onPress={handleComment}>
               <Feather name="send" size={24} color="black" />
             </TouchableWithoutFeedback>
