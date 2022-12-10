@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { Button } from "react-native-ios-kit";
 import Gradient from "react-native-css-gradient";
+import * as ImagePicker from "expo-image-picker";
 
 const ProfileSetting = () => {
   const gradient = `linear-gradient(to top, black, white )`;
@@ -29,6 +30,21 @@ const ProfileSetting = () => {
       title: "Following",
     },
   ];
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsMultipleSelection: true,
+      selectionLimit: 5,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImages(result.assets);
+    }
+  };
+
   return (
     <SafeAreaView style={{ width: "100%", height: "100%", flex: 1 }}>
       <View style={styles.header_container}>
@@ -38,13 +54,7 @@ const ProfileSetting = () => {
             uri: "https://vtv1.mediacdn.vn/zoom/700_438/2020/6/10/5aedc4ae46ab8-sehun-1-600x450-15917615965621479454230.jpg",
           }}
         />
-        <TouchableOpacity
-          style={styles.setting}
-          // onPress={() => {
-          //   console.log("test :>> ", test);
-          //   navigation.navigate("ProfileSetting");
-          // }}
-        >
+        <TouchableOpacity style={styles.setting}>
           <MaterialIcons name="add-a-photo" size={24} color="black" />
         </TouchableOpacity>
         <View style={styles.info_container}>
@@ -68,6 +78,7 @@ const ProfileSetting = () => {
                 color="black"
                 borderWidth={1}
                 borderColor="white"
+                onPress={pickImage}
               />
             </TouchableOpacity>
             <Text style={{ color: "#fff", fontSize: 18, fontWeight: "500" }}>

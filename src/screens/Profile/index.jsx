@@ -306,7 +306,6 @@ const Profile = ({ navigation }) => {
           flexDirection: "row",
           flexWrap: "wrap",
           alignItems: "center",
-          justifyContent: "center",
           marginTop: 16,
         }}
       >
@@ -315,12 +314,12 @@ const Profile = ({ navigation }) => {
             return (
               <TouchableOpacity
                 style={{
-                  width: 160,
-                  height: 160,
+                  width: 120,
+                  height: 120,
                   borderRadius: 8,
                   overflow: "hidden",
-                  marginHorizontal: 16,
-                  marginVertical: 16,
+                  marginHorizontal: 4,
+                  marginVertical: 4,
                 }}
               >
                 <Image
