@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateInfoUser } from "../../../features/user";
 
 const SignIn = (props) => {
+    console.log(apiContext);
     // redux
     const user = useSelector(state => state.user)
     const dispatch = useDispatch();
