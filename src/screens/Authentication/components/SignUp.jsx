@@ -10,7 +10,7 @@ import {
     Alert
 } from "react-native";
 import { Button } from "react-native-ios-kit";
-import ApiContext from "../../../contexts/api.context";
+import { apiContext } from "../../../contexts/api.context";
 import { useDispatch, useSelector } from "react-redux";
 import { updateInfoUser } from "../../../features/user";
 
@@ -19,7 +19,6 @@ const SignUp = (props) => {
     const user = useSelector(state => state.user)
     const dispatch = useDispatch();
     // state
-    const api = new ApiContext()
     const [auth, setAuth] = useState({
         display_name: '',
         email: '',
@@ -45,7 +44,7 @@ const SignUp = (props) => {
                     display_name: auth.display_name,
                     password: auth.password,
                 }
-                let result = await api.signUp(data)
+                let result = await apiContext.signUp(data)
                 console.log(result);
                 dispatch(updateInfoUser(result.user))
                 Alert.alert('Đăng kí thành công')

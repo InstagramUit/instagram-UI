@@ -9,10 +9,9 @@ import {
 } from "react-native";
 import Header from "../../components/Header";
 import Post from "./components/Post";
-import ApiContext from "../../contexts/api.context";
+import { apiContext } from "../../contexts/api.context";
 
 const Home = () => {
-    const api = new ApiContext()
     const [posts, setPosts] = useState([])
     const [DATA, setData] = useState([
         {
@@ -44,7 +43,7 @@ const Home = () => {
     ]);
     useEffect(() => {
         const fetchData = async () => {
-            let result = await api.getPosts()
+            let result = await apiContext.getPosts()
             console.log(result)
             setPosts(result.data?.posts || [])
         }
