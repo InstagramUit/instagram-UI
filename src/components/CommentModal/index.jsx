@@ -12,7 +12,7 @@ import {
 import { Feather } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import ApiContext from "../../contexts/api.context";
+import { apiContext } from "../../contexts/api.context";
 const CommentModal = (props) => {
   const { showModal, setShowModal, onTouchOutside, userAvt, post } = props;
   const windowHeight = Dimensions.get("window").height;
@@ -29,7 +29,6 @@ const CommentModal = (props) => {
     );
   };
   // render comments
-  const api = new ApiContext();
   const user = useSelector((state) => state.user);
   const [comments, setComments] = useState(props.comments);
 
@@ -40,7 +39,7 @@ const CommentModal = (props) => {
       content,
     };
     console.log(data);
-    api.createCommentPost(data).then((res) => {
+    apiContext.createCommentPost(data).then((res) => {
       let newComments = {
         avatar: user.avatar,
         display_name: user.display_name,

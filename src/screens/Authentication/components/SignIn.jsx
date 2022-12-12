@@ -10,18 +10,18 @@ import {
     Image,
 } from "react-native";
 import { Button } from "react-native-ios-kit";
-import ApiContext from "../../../contexts/api.context";
+import { apiContext } from "../../../contexts/api.context";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from "react-redux";
 import { updateInfoUser } from "../../../features/user";
 
 const SignIn = (props) => {
+    console.log(apiContext);
     // redux
     const user = useSelector(state => state.user)
     const dispatch = useDispatch();
     // props
     const { navigation } = props
-    const api = new ApiContext()
     const [auth, setAuth] = useState({
         email: '',
         password: '',
@@ -36,7 +36,7 @@ const SignIn = (props) => {
     const handleLogin = async () => {
         try {
             // console.log(auth);
-            let result = await api.login(auth)
+            let result = await apiContext.login(auth)
             let user = result.user
             dispatch(updateInfoUser(user))
             await AsyncStorage.setItem('access-token', user.accessToken)

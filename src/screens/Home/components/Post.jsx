@@ -18,14 +18,13 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { Video } from "expo-av";
 import { useDispatch, useSelector } from "react-redux";
-import ApiContext from "../../../contexts/api.context";
+import { apiContext } from "../../../contexts/api.context";
 import CommentModal from "../../../components/CommentModal";
 
 const Post = (props) => {
   // redux
   const user = useSelector((state) => state.user);
   // props, state
-  const api = new ApiContext();
   const { post } = props;
   const ref = useRef(null);
   const windowHeight = Dimensions.get("screen").height;
@@ -40,7 +39,7 @@ const Post = (props) => {
   const handleLike = () => {
     try {
       let newLike = !like;
-      api.setLikePost(post.id, newLike).then((res) => {
+      apiContext.setLikePost(post.id, newLike).then((res) => {
         console.log("thay doi like thanh cong.");
         setLike(newLike);
         setTotalLikes(

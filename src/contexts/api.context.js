@@ -1,35 +1,13 @@
-import api from '../services/api.service';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { authenticationContext } from "./authentication.context";
+import { postContext } from "./post.context";
+import { commentContext } from "./comment.context";
+import { notificationContext } from "./notification.context";
+import { followContext } from "./follow.context";
 
-
-export default class ApiContext {
-    async login(data) {
-        const response = api.post('/login', data);
-        return response;
-    }
-    async signUp(data) {
-        const response = api.post('/sign-up', data);
-        return response;
-    }
-    async getPosts() {
-        const value = await AsyncStorage.getItem('access-token')
-        console.log(value);
-        api.defaults.headers.Authorization = `Bearer ${value}`
-        const response = api.get('/posts');
-        return response;
-    }
-    async setLikePost(id_post, isLike) {
-        const value = await AsyncStorage.getItem('access-token')
-        console.log(value);
-        api.defaults.headers.Authorization = `Bearer ${value}`
-        const response = api.put(`/posts/like/${id_post}`,{isLike});
-        return response;
-    }
-    async createCommentPost(data){
-        const value = await AsyncStorage.getItem('access-token')
-        console.log(value);
-        api.defaults.headers.Authorization = `Bearer ${value}`
-        const response = api.post(`/comments`,data);
-        return response;
-    }
-}
+export const apiContext = {
+  ...authenticationContext,
+  ...postContext,
+  ...commentContext,
+  ...notificationContext,
+  ...followContext,
+};
