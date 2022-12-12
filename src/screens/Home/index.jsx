@@ -42,6 +42,7 @@ const Home = () => {
 
     ]);
     useEffect(() => {
+        console.log(13123);
         const fetchData = async () => {
             let result = await apiContext.getPosts()
             console.log(result)
