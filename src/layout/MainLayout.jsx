@@ -21,7 +21,20 @@ const MainLayout = () => {
         name="Home"
         component={Home}
         options={{
-          headerTitle: () => <Image source={logo} />,
+          headerTitle: "",
+          headerLeft: () => (
+            <Image
+              style={{ width: "100%", height: 36 }}
+              source="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
+            />
+          ),
+          headerLeftContainerStyle: {
+            height: "100%",
+            width: 161,
+            display: "flex",
+            alignItems: "center",
+            paddingHorizontal: 16,
+          },
           tabBarLabel: "",
           tabBarIcon: (tabInfo) => {
             return (

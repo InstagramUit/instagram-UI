@@ -1,7 +1,6 @@
 import * as React from "react";
 import "./src/config/global.config";
 import { NavigationContainer } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, View, Image } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createStackNavigator } from "@react-navigation/stack";

@@ -14,10 +14,10 @@ export const postContext = {
     const response = api.put(`/posts/like/${id_post}`, { isLike });
     return response;
   },
-  createPost:async (data)=>{
+  createPost: async (data) => {
     const value = await AsyncStorage.getItem("access-token");
     api.defaults.headers.Authorization = `Bearer ${value}`;
-    const response = api.post(`/posts`,  data);
+    const response = api.post(`/posts`, data);
     return response;
-  }
+  },
 };

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
+import { apiContext } from "../../contexts/api.context";
 import {
   Text,
   View,
@@ -16,17 +17,26 @@ import * as ImagePicker from "expo-image-picker";
 
 const ProfileSetting = () => {
   const gradient = `linear-gradient(to top, black, white )`;
+  const [userInfo, setUserInfo] = useState({});
+  useEffect(() => {
+    const fetchData = async () => {
+      let result = await apiContext.getInfoUser();
+      // setPosts(result.data?.posts || []);
+      setUserInfo(result.data);
+    };
+    fetchData().catch((err) => console.log(err));
+  }, []);
   const subInfo = [
     {
-      number: 100,
+      number: userInfo.posts ? userInfo.posts.length : 0,
       title: "Posts",
     },
     {
-      number: 100,
+      number: userInfo.followers ? userInfo.followers.length : 0,
       title: "Followers",
     },
     {
-      number: 100,
+      number: userInfo.followings ? userInfo.followings.length : 0,
       title: "Following",
     },
   ];
@@ -51,12 +61,9 @@ const ProfileSetting = () => {
         <Image
           style={{ width: "100%", height: 240 }}
           source={{
-            uri: "https://vtv1.mediacdn.vn/zoom/700_438/2020/6/10/5aedc4ae46ab8-sehun-1-600x450-15917615965621479454230.jpg",
+            uri: userInfo.avatar,
           }}
         />
-        <TouchableOpacity style={styles.setting}>
-          <MaterialIcons name="add-a-photo" size={24} color="black" />
-        </TouchableOpacity>
         <View style={styles.info_container}>
           <View style={{ marginBottom: 16, alignItems: "center" }}>
             <Image
@@ -68,7 +75,7 @@ const ProfileSetting = () => {
                 borderColor: "#ffffff",
               }}
               source={{
-                uri: "https://i.pinimg.com/736x/a9/1b/46/a91b46190f00a3442ff2ba5e9ee7178f.jpg",
+                uri: userInfo.avatar,
               }}
             />
             <TouchableOpacity style={styles.avt_setting}>
@@ -81,8 +88,15 @@ const ProfileSetting = () => {
                 onPress={pickImage}
               />
             </TouchableOpacity>
-            <Text style={{ color: "#fff", fontSize: 18, fontWeight: "500" }}>
-              Keem_Liennn
+            <Text
+              style={{
+                color: "#fff",
+                fontSize: 18,
+                fontWeight: "500",
+                marginTop: 8,
+              }}
+            >
+              {userInfo.display_name}
             </Text>
           </View>
           <View style={styles.sub_info}>
@@ -111,10 +125,14 @@ const ProfileSetting = () => {
       </View>
       <View>
         <View style={styles.container}>
+          {console.log("userInfo", userInfo)}
           <View>
             <View>
               <Text style={styles.text_header}>Username</Text>
-              <TextInput style={styles.input} placeholder="Enter your name" />
+              <TextInput
+                style={styles.input}
+                placeholder={userInfo.display_name}
+              />
             </View>
             <View style={styles.input_container}>
               <Text style={styles.text_header}>Email</Text>
@@ -195,7 +213,7 @@ const styles = StyleSheet.create({
   },
   avt_setting: {
     position: "absolute",
-    bottom: 12,
+    bottom: 18,
     width: 24,
     height: 24,
   },

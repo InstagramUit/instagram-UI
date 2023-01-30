@@ -1,7 +1,8 @@
 import { Video } from "expo-av";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { apiContext } from "../../contexts/api.context";
 import { AntDesign } from "@expo/vector-icons";
-// import { Button } from "react-native-ios-kit";
+import { Feather } from "@expo/vector-icons";
 import {
   Text,
   View,
@@ -13,23 +14,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Gradient from "react-native-css-gradient";
+import { FlatList } from "react-native-gesture-handler";
 
 const Profile = ({ navigation }) => {
   const gradient = `linear-gradient(to top, black, white )`;
-  const subInfo = [
-    {
-      number: 100,
-      title: "Posts",
-    },
-    {
-      number: 100,
-      title: "Followers",
-    },
-    {
-      number: 100,
-      title: "Following",
-    },
-  ];
   const [DATA, setData] = useState([
     {
       id: 1,
@@ -232,13 +220,36 @@ const Profile = ({ navigation }) => {
       comments: [""],
     },
   ]);
+  const [userInfo, setUserInfo] = useState({});
+  useEffect(() => {
+    const fetchData = async () => {
+      let result = await apiContext.getInfoUser();
+      // setPosts(result.data?.posts || []);
+      setUserInfo(result.data);
+    };
+    fetchData().catch((err) => console.log(err));
+  }, []);
+  const subInfo = [
+    {
+      number: userInfo.posts ? userInfo.posts.length : 0,
+      title: "Posts",
+    },
+    {
+      number: userInfo.followers ? userInfo.followers.length : 0,
+      title: "Followers",
+    },
+    {
+      number: userInfo.followings ? userInfo.followings.length : 0,
+      title: "Following",
+    },
+  ];
   return (
     <SafeAreaView style={{ width: "100%", height: "100%", flex: 1 }}>
       <View style={styles.header_container}>
         <Image
           style={{ width: "100%", height: 240 }}
           source={{
-            uri: "https://vtv1.mediacdn.vn/zoom/700_438/2020/6/10/5aedc4ae46ab8-sehun-1-600x450-15917615965621479454230.jpg",
+            uri: userInfo.avatar,
           }}
         />
         <View style={styles.setting}>
@@ -267,11 +278,11 @@ const Profile = ({ navigation }) => {
                 borderColor: "#ffffff",
               }}
               source={{
-                uri: "https://i.pinimg.com/736x/a9/1b/46/a91b46190f00a3442ff2ba5e9ee7178f.jpg",
+                uri: userInfo.avatar,
               }}
             />
             <Text style={{ color: "#fff", fontSize: 18, fontWeight: "500" }}>
-              Keem_Liennn
+              {userInfo.display_name}
             </Text>
           </View>
           <View style={styles.sub_info}>
@@ -298,73 +309,96 @@ const Profile = ({ navigation }) => {
           style={[styles.layer, { width: "100%", height: 240 }]}
         />
       </View>
-      <ScrollView
-        style={{ width: "100%", height: "100%" }}
-        contentContainerStyle={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "row",
-          flexWrap: "wrap",
-          alignItems: "center",
-          marginTop: 16,
-        }}
-      >
-        {DATA.map((item) => {
-          if (item.urls[0].type == "image") {
-            return (
-              <TouchableOpacity
-                style={{
-                  width: 120,
-                  height: 120,
-                  borderRadius: 8,
-                  overflow: "hidden",
-                  marginHorizontal: 4,
-                  marginVertical: 4,
-                }}
-              >
-                <Image
-                  style={styles.img}
-                  resizeMethod="scale"
-                  resizeMode="cover"
-                  source={{
-                    uri: item.urls[0].url,
-                  }}
-                />
-              </TouchableOpacity>
-            );
-          } else if (item.urls[0].type == "video") {
-            return (
-              <TouchableOpacity
-                style={{
-                  width: 160,
-                  height: 160,
-                  borderRadius: 8,
-                  overflow: "hidden",
-                  marginHorizontal: 16,
-                  marginVertical: 16,
-                }}
-              >
-                <Video
+      {userInfo.posts && userInfo.posts.length > 0 ? (
+        <ScrollView
+          style={{ width: "100%", height: "100%" }}
+          contentContainerStyle={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "wrap",
+            alignItems: "center",
+            marginTop: 16,
+          }}
+        >
+          {DATA.map((item) => {
+            if (item.urls[0].type == "image") {
+              return (
+                <TouchableOpacity
+                  key={item}
                   style={{
-                    width: "100%",
-                    height: "100%",
-                    justifyContent: "center",
+                    width: 120,
+                    height: 120,
+                    borderRadius: 8,
+                    overflow: "hidden",
+                    marginHorizontal: 4,
+                    marginVertical: 4,
                   }}
-                  resizeMethod="scale"
-                  resizeMode="contain"
-                  shouldPlay
-                  source={{
-                    uri: "https://anhdepfree.com/wp-content/uploads/2020/11/hinh-nen-phong-canh.jpg",
+                >
+                  <Image
+                    style={styles.img}
+                    resizeMethod="scale"
+                    resizeMode="cover"
+                    source={{
+                      uri: item.urls[0].url,
+                    }}
+                  />
+                </TouchableOpacity>
+              );
+            } else if (item.urls[0].type == "video") {
+              return (
+                <TouchableOpacity
+                  style={{
+                    width: 160,
+                    height: 160,
+                    borderRadius: 8,
+                    overflow: "hidden",
+                    marginHorizontal: 16,
+                    marginVertical: 16,
                   }}
-                  videoStyle={{ position: "relative" }}
-                  isLooping
-                  shouldRasterizeIOS={true}
-                />
-              </TouchableOpacity>
-            );
-          }
-        })}
-      </ScrollView>
+                >
+                  <Video
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      justifyContent: "center",
+                    }}
+                    resizeMethod="scale"
+                    resizeMode="contain"
+                    shouldPlay
+                    source={{
+                      uri: "https://anhdepfree.com/wp-content/uploads/2020/11/hinh-nen-phong-canh.jpg",
+                    }}
+                    videoStyle={{ position: "relative" }}
+                    isLooping
+                    shouldRasterizeIOS={true}
+                  />
+                </TouchableOpacity>
+              );
+            }
+          })}
+        </ScrollView>
+      ) : (
+        <View
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Feather name="camera" size={64} color="#292929" />
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "500",
+            }}
+          >
+            Chưa có bài viết nào!
+          </Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 };

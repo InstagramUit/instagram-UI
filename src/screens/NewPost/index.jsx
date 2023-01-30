@@ -14,24 +14,70 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { Button } from "react-native-ios-kit";
 
+import { apiContext } from "../../contexts/api.context";
+
 const NewPost = () => {
   const windowHeight = Dimensions.get("screen").height;
   const bottomTabHeight = useBottomTabBarHeight();
   const headerHeight = useHeaderHeight();
   const [images, setImages] = useState([]);
+  const [description, setDescription] = useState("");
 
+  const [data, setData] = useState([]);
+  const [userInfo, setUserInfo] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let result = await apiContext.getInfoUser();
+      // setPosts(result.data?.posts || []);
+      setUserInfo(result.data);
+    };
+    fetchData().catch((err) => console.log(err));
+  }, []);
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsMultipleSelection: true,
       selectionLimit: 5,
+      aspect: [4, 3],
+      allowsEditing: true,
+      orderedSelection: true,
+      base64: true,
     });
 
-    console.log(result);
+    result.assets.map((item) => {
+      if (item.uri.includes("video"))
+        data.push({
+          type: "video",
+          src: item.base64,
+        });
+      else
+        data.push({
+          type: "image",
+          src: item.base64,
+        });
+    });
 
     if (!result.canceled) {
       setImages(result.assets);
+    }
+  };
+
+  const handelCreatePost = () => {
+    try {
+      let newPost = {
+        items: data,
+        description: description,
+      };
+
+      // console.log("newPost", newPost);
+      apiContext.createPost(newPost).then((res) => {
+        console.log(res);
+      });
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Có lỗi xảy ra.");
     }
   };
 
@@ -58,9 +104,10 @@ const NewPost = () => {
             // if (item.type == "image") {
             return (
               <Image
-                style={{ height: "100%" }}
+                key={item}
+                style={styles.img}
                 resizeMethod="scale"
-                resizeMode="cover"
+                resizeMode="center"
                 source={{
                   uri: item.uri,
                 }}
@@ -114,7 +161,7 @@ const NewPost = () => {
         multiline={true}
         numberOfLines={5}
         onChangeText={(text) => {
-          console.log(text);
+          setDescription(text);
         }}
         style={{
           fontSize: 18,
@@ -138,9 +185,7 @@ const NewPost = () => {
       <View style={{ margin: 24 }}>
         <Button
           style={styles.btn}
-          onPress={() => {
-            console.log("Click");
-          }}
+          onPress={handelCreatePost}
           children={
             <Text style={[styles.btn_text, { letterSpacing: 1 }]}>Post</Text>
           }
@@ -154,10 +199,10 @@ export default NewPost;
 
 const styles = StyleSheet.create({
   img: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "fill",
-    resizeMethod: "scale",
+    flex: 1,
+    width: null,
+    height: null,
+    resizeMode: "contain",
   },
   btn: {
     width: "100%",

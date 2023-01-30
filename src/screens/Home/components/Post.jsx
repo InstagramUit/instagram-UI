@@ -10,17 +10,20 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { PageControlView } from "react-native-ios-kit";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
+// import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { AntDesign, Feather } from "@expo/vector-icons";
 import { Button } from "react-native-ios-kit";
 import { Dimensions } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { Video } from "expo-av";
+import VideoPlayer from "expo-video-player";
 import { useDispatch, useSelector } from "react-redux";
 import { apiContext } from "../../../contexts/api.context";
 import CommentModal from "../../../components/CommentModal";
 
+const WINDOW_WIDTH = Dimensions.get("window").width;
+const WINDOW_HEIGHT = Dimensions.get("window").height;
 const Post = (props) => {
   // redux
   const user = useSelector((state) => state.user);
@@ -35,6 +38,10 @@ const Post = (props) => {
   const [totalLikes, setTotalLikes] = useState(post.totalLikes);
   const [totalComments, setTotalComments] = useState(post.totalComments);
   const [follow, setFollow] = useState(false);
+
+  const [unmutted, setUnmutted] = useState(true);
+  const [videoref, setvideoref] = useState(null);
+  const [sheetRef, setSheetRef] = useState(useRef(null));
   const handleFollow = () => {};
   const handleLike = () => {
     try {
@@ -71,77 +78,17 @@ const Post = (props) => {
         width: "100%",
         height: "100%",
         backgroundColor: "#000",
-        height: windowHeight - bottomTabHeight - headerHeight,
+        // height: windowHeight - bottomTabHeight - headerHeight,
+        borderBottomWidth: 0.5,
+        borderBottomColor: "#292929",
       }}
     >
-      <PageControlView
-        defaultPage={1}
-        style={{ width: "100%", height: "100%", display: "flex" }}
-        containerStyle={{ height: "100%" }}
-      >
-        {Array.isArray(post.items) &&
-          post.items.length > 0 &&
-          post.items.map((item, index) => {
-            if (item.type == "image") {
-              return (
-                <Image
-                  key={index}
-                  style={styles.img}
-                  resizeMethod="scale"
-                  resizeMode="center"
-                  source={{
-                    uri: item.src,
-                  }}
-                />
-              );
-            } else if (item.type == "video") {
-              return (
-                <Video
-                  key={index}
-                  ref={ref}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    justifyContent: "center",
-                  }}
-                  resizeMethod="scale"
-                  resizeMode="contain"
-                  shouldPlay
-                  source={{
-                    uri: item.src,
-                  }}
-                  videoStyle={{ position: "relative" }}
-                  isLooping
-                  shouldRasterizeIOS={true}
-                />
-              );
-            }
-          })}
-      </PageControlView>
       <View
         style={{
-          position: "absolute",
-          bottom: 80,
-          right: 0,
-          left: 0,
-          padding: 16,
-        }}
-      >
-        <Text style={styles.name}>@{post.display_name}</Text>
-        <Text style={styles.description}>{post.description}</Text>
-      </View>
-      <View
-        style={{
-          position: "absolute",
-          top: "50%",
-          right: 0,
-          padding: 16,
-          // transform: [{ translateY: `-50%` }],
-          zIndex: 9999,
           display: "flex",
-          justifyContent: "center",
           alignItems: "center",
-          // gap: 16,
+          flexDirection: "row",
+          padding: 16,
         }}
       >
         <View>
@@ -181,6 +128,155 @@ const Post = (props) => {
             />
           </Button>
         </View>
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: "500",
+            marginLeft: 16,
+            color: "white",
+          }}
+        >
+          @{post.display_name}
+        </Text>
+      </View>
+      <PageControlView
+        // defaultPage={1}
+        // style={{ width: "100%", height: "100%", display: "flex" }}
+        // containerStyle={{ height: "100%" }}
+        defaultPage={1}
+        style={{ display: "flex" }}
+        containerStyle={{
+          width: "100%",
+          height: 300,
+        }}
+      >
+        {Array.isArray(post.items) &&
+          post.items.length > 0 &&
+          post.items.map((item, index) => {
+            if (item.type == "image") {
+              return (
+                <Image
+                  key={index}
+                  style={styles.img}
+                  resizeMethod="scale"
+                  resizeMode="center"
+                  // height={WINDOW_HEIGHT}
+                  source={{
+                    uri: item.src,
+                  }}
+                />
+              );
+            } else if (item.type == "video") {
+              return (
+                <View
+                  style={{
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <VideoPlayer
+                    videoProps={{
+                      isLooping: true,
+                      shouldPlay: true,
+                      resizeMode: Video.RESIZE_MODE_COVER,
+                      source: {
+                        uri: item.src,
+                      },
+                      isMuted: unmutted,
+                    }}
+                    mute={{
+                      enterMute: () => setUnmutted(!unmutted),
+                      exitMute: () => setUnmutted(!unmutted),
+                    }}
+                    inFullscreen={false}
+                    showControlsOnLoad={true}
+                    showFullscreenButton={false}
+                    height={WINDOW_WIDTH}
+                    width={WINDOW_WIDTH}
+                    shouldPlay={true}
+                    isLooping={true}
+                    style={{
+                      aspectRatio: 1 / 1,
+                      height: WINDOW_WIDTH,
+                      width: WINDOW_WIDTH,
+                      backgroundColor: "black",
+                    }}
+                  />
+                  <TouchableOpacity
+                    style={{
+                      position: "absolute",
+                      borderRadius: 500,
+                      backgroundColor: "black",
+                      width: 40,
+                      height: 40,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      margin: 10,
+                      bottom: 0,
+                      right: 0,
+                    }}
+                    activeOpacity={1}
+                    onPress={() => {
+                      setUnmutted(!unmutted);
+                    }}
+                  >
+                    {!unmutted ? (
+                      <Feather name="volume-2" size={20} color="white" />
+                    ) : (
+                      <Feather name="volume-x" size={20} color="white" />
+                    )}
+                  </TouchableOpacity>
+                </View>
+                // <Video
+                //   key={index}
+                //   ref={ref}
+                //   style={{
+                //     width: "100%",
+                //     height: "100%",
+                //     justifyContent: "center",
+                //   }}
+                //   resizeMethod="scale"
+                //   resizeMode="contain"
+                //   shouldPlay
+                //   source={{
+                //     uri: item.src,
+                //   }}
+                //   videoStyle={{ position: "relative" }}
+                //   isLooping
+                //   shouldRasterizeIOS={true}
+                // />
+              );
+            }
+          })}
+      </PageControlView>
+      <View
+        style={{
+          // position: "absolute",
+          // bottom: 80,
+          // right: 0,
+          // left: 0,
+          padding: 16,
+        }}
+      >
+        <Text style={styles.name}>@{post.display_name}</Text>
+        <Text style={styles.description}>{post.description}</Text>
+      </View>
+      <View
+        style={{
+          position: "absolute",
+          top: "25%",
+          right: 0,
+          padding: 16,
+          // transform: [{ translateY: `-50%` }],
+          zIndex: 9999,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          // gap: 16,
+        }}
+      >
         <View style={{ display: "flex", alignItems: "center", marginTop: 16 }}>
           <TouchableOpacity onPress={handleLike}>
             <AntDesign name="heart" size={24} color={like ? "red" : "white"} />
