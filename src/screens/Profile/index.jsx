@@ -13,6 +13,7 @@ import {
   Button,
   TouchableOpacity,
 } from "react-native";
+import Post from "../Home/components/Post";
 import Gradient from "react-native-css-gradient";
 import { FlatList } from "react-native-gesture-handler";
 
@@ -318,10 +319,26 @@ const Profile = ({ navigation }) => {
             flexDirection: "row",
             flexWrap: "wrap",
             alignItems: "center",
-            marginTop: 16,
+            // marginTop: 16,
           }}
         >
-          {DATA.map((item) => {
+          {console.log("posts", userInfo.posts)}
+          <FlatList
+            data={userInfo.posts}
+            // pagingEnabled
+            renderItem={(item) => {
+              return (
+                <Post
+                  post={item.item}
+                  userName={userInfo.display_name}
+                  userAvt={userInfo.avatar}
+                  key={item.index}
+                />
+              );
+            }}
+            keyExtractor={(item) => item.id}
+          />
+          {/* {DATA.map((item) => {
             if (item.urls[0].type == "image") {
               return (
                 <TouchableOpacity
@@ -376,7 +393,7 @@ const Profile = ({ navigation }) => {
                 </TouchableOpacity>
               );
             }
-          })}
+          })} */}
         </ScrollView>
       ) : (
         <View

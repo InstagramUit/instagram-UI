@@ -45,7 +45,6 @@ const NewPost = () => {
       orderedSelection: true,
       base64: true,
     });
-
     result.assets.map((item) => {
       if (item.uri.includes("video"))
         data.push({
@@ -71,9 +70,11 @@ const NewPost = () => {
         description: description,
       };
 
-      // console.log("newPost", newPost);
+      console.log("newPost", newPost);
       apiContext.createPost(newPost).then((res) => {
         console.log(res);
+        // setData([]);
+        // setDescription("");
       });
     } catch (error) {
       console.log(error);

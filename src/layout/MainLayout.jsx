@@ -1,4 +1,5 @@
 import Home from "../screens/Home";
+import UserProfile from "../screens/Home/components/UserProfile";
 import Search from "../screens/Search";
 import NewPost from "../screens/NewPost";
 import Notification from "../screens/Notification";
@@ -18,8 +19,8 @@ const MainLayout = () => {
   return (
     <Tabs.Navigator>
       <Tabs.Screen
-        name="Home"
-        component={Home}
+        name="HomeScreen"
+        component={HomeScreen}
         options={{
           headerTitle: "",
           headerLeft: () => (
@@ -135,6 +136,18 @@ const styles = StyleSheet.create({
   },
 });
 
+const HomeScreen = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="UserProfile" component={UserProfile} />
+    </Stack.Navigator>
+  );
+};
 const ProfileScreen = () => {
   return (
     <Stack.Navigator

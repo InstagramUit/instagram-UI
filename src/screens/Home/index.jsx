@@ -11,7 +11,7 @@ import Header from "../../components/Header";
 import Post from "./components/Post";
 import { apiContext } from "../../contexts/api.context";
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
   const [DATA, setData] = useState([
     {
@@ -48,13 +48,19 @@ const Home = () => {
     fetchData().catch((err) => console.log(err));
   }, []);
 
+  const showProfile = (id) => {
+    navigation.navigate("UserProfile", {
+      user_id: id,
+    });
+  };
+
   return (
     <SafeAreaView
       style={{
         width: "100%",
         height: "100%",
         flex: 1,
-        backgroundColor: "black",
+        backgroundColor: "white",
       }}
     >
       {/* <Header /> */}
@@ -62,7 +68,16 @@ const Home = () => {
         data={posts}
         // pagingEnabled
         renderItem={(item) => {
-          return <Post post={item.item} key={item.index} />;
+          return (
+            <Post
+              navigation={navigation}
+              post={item.item}
+              userName={item.item.display_name}
+              userAvt={item.item.avatar}
+              // showProfile={showProfile(item.item.id_user)}
+              key={item.index}
+            />
+          );
         }}
         keyExtractor={(item) => item.id}
       />

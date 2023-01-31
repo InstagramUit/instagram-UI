@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { CommonActions } from "@react-navigation/native";
 import {
   View,
   Image,
@@ -28,7 +29,8 @@ const Post = (props) => {
   // redux
   const user = useSelector((state) => state.user);
   // props, state
-  const { post } = props;
+  const { post, userName, userAvt, navigation } = props;
+
   const ref = useRef(null);
   const windowHeight = Dimensions.get("screen").height;
   const bottomTabHeight = useBottomTabBarHeight();
@@ -60,9 +62,11 @@ const Post = (props) => {
   };
 
   useEffect(() => {
-    let isLike = post.likes.some((like) => like.id_user == user.id);
-    setLike(isLike);
-    setFollow(post.follow);
+    if (post.likes) {
+      let isLike = post.likes.some((like) => like.id_user == user.id);
+      setLike(isLike);
+      setFollow(post.follow);
+    }
   }, []);
 
   const [showModal, setShowModal] = useState(false);
@@ -77,10 +81,15 @@ const Post = (props) => {
       style={{
         width: "100%",
         height: "100%",
-        backgroundColor: "#000",
+        backgroundColor: "white",
         // height: windowHeight - bottomTabHeight - headerHeight,
-        borderBottomWidth: 0.5,
-        borderBottomColor: "#292929",
+        borderBottomWidth: 1,
+        borderBottomColor: "#d8d8d8",
+        shadowColor: "#d8d8d8",
+        shadowOffset: {
+          width: "100%",
+          height: 1,
+        },
       }}
     >
       <View
@@ -92,20 +101,28 @@ const Post = (props) => {
         }}
       >
         <View>
-          <Image
-            style={{
-              width: 50,
-              height: 50,
-              borderRadius: 25,
-              borderWidth: 1,
-              borderColor: "#fff",
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("UserProfile", {
+                user_id: post.id_user,
+              });
             }}
-            source={{
-              uri:
-                post.avatar ||
-                "https://res.cloudinary.com/dhz4hr8dq/image/upload/v1669695868/images_xigv3c.jpg",
-            }}
-          />
+          >
+            <Image
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 25,
+                borderWidth: 1,
+                borderColor: "#fff",
+              }}
+              source={{
+                uri:
+                  userAvt ||
+                  "https://res.cloudinary.com/dhz4hr8dq/image/upload/v1669695868/images_xigv3c.jpg",
+              }}
+            />
+          </TouchableOpacity>
           <Button
             style={{
               position: "absolute",
@@ -133,10 +150,10 @@ const Post = (props) => {
             fontSize: 18,
             fontWeight: "500",
             marginLeft: 16,
-            color: "white",
+            color: "#292929",
           }}
         >
-          @{post.display_name}
+          @{userName}
         </Text>
       </View>
       <PageControlView
@@ -148,6 +165,7 @@ const Post = (props) => {
         containerStyle={{
           width: "100%",
           height: 300,
+          backgroundColor: "#ddd",
         }}
       >
         {Array.isArray(post.items) &&
@@ -229,24 +247,6 @@ const Post = (props) => {
                     )}
                   </TouchableOpacity>
                 </View>
-                // <Video
-                //   key={index}
-                //   ref={ref}
-                //   style={{
-                //     width: "100%",
-                //     height: "100%",
-                //     justifyContent: "center",
-                //   }}
-                //   resizeMethod="scale"
-                //   resizeMode="contain"
-                //   shouldPlay
-                //   source={{
-                //     uri: item.src,
-                //   }}
-                //   videoStyle={{ position: "relative" }}
-                //   isLooping
-                //   shouldRasterizeIOS={true}
-                // />
               );
             }
           })}
@@ -260,7 +260,7 @@ const Post = (props) => {
           padding: 16,
         }}
       >
-        <Text style={styles.name}>@{post.display_name}</Text>
+        <Text style={styles.name}>@{userName}</Text>
         <Text style={styles.description}>{post.description}</Text>
       </View>
       <View
@@ -315,12 +315,12 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     fontWeight: "500",
-    color: "#fff",
+    color: "#292929",
   },
   description: {
     fontSize: 18,
     fontWeight: "400",
-    color: "#fff",
+    color: "#292929",
     marginTop: 8,
     lineHeight: 21,
   },
