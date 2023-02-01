@@ -48,12 +48,6 @@ const Home = ({ navigation }) => {
     fetchData().catch((err) => console.log(err));
   }, []);
 
-  const showProfile = (id) => {
-    navigation.navigate("UserProfile", {
-      user_id: id,
-    });
-  };
-
   return (
     <SafeAreaView
       style={{
@@ -74,7 +68,7 @@ const Home = ({ navigation }) => {
               post={item.item}
               userName={item.item.display_name}
               userAvt={item.item.avatar}
-              // showProfile={showProfile(item.item.id_user)}
+              isFollow={item.item.follow}
               key={item.index}
             />
           );

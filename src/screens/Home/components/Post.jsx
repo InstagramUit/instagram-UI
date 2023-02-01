@@ -28,18 +28,30 @@ const WINDOW_HEIGHT = Dimensions.get("window").height;
 const Post = (props) => {
   // redux
   const user = useSelector((state) => state.user);
-  // props, state
-  const { post, userName, userAvt, navigation } = props;
 
+  // props, state
+  const { post, userName, userAvt, isFollow, navigation } = props;
+
+  const [userInfo, setUserInfo] = useState({});
+  useEffect(() => {
+    const fetchData = async () => {
+      let result = await apiContext.getInfoUser();
+      // setPosts(result.data?.posts || []);
+      setUserInfo(result.data);
+    };
+    fetchData().catch((err) => console.log(err));
+  }, []);
   const ref = useRef(null);
   const windowHeight = Dimensions.get("screen").height;
   const bottomTabHeight = useBottomTabBarHeight();
   const headerHeight = useHeaderHeight();
 
+  const isUser = userInfo.id === post.id_user ? true : false;
+
   const [like, setLike] = useState(false);
   const [totalLikes, setTotalLikes] = useState(post.totalLikes);
   const [totalComments, setTotalComments] = useState(post.totalComments);
-  const [follow, setFollow] = useState(false);
+  const [follow, setFollow] = useState(isFollow);
 
   const [unmutted, setUnmutted] = useState(true);
   const [videoref, setvideoref] = useState(null);
@@ -65,7 +77,7 @@ const Post = (props) => {
     if (post.likes) {
       let isLike = post.likes.some((like) => like.id_user == user.id);
       setLike(isLike);
-      setFollow(post.follow);
+      // setFollow(post.follow);
     }
   }, []);
 
@@ -105,6 +117,7 @@ const Post = (props) => {
             onPress={() => {
               navigation.navigate("UserProfile", {
                 user_id: post.id_user,
+                isFollow: post.follow,
               });
             }}
           >
@@ -123,27 +136,29 @@ const Post = (props) => {
               }}
             />
           </TouchableOpacity>
-          <Button
-            style={{
-              position: "absolute",
-              left: 16,
-              bottom: -9,
-              paddingVertical: 1,
-              paddingHorizontal: 2,
-              borderRadius: 12,
-              backgroundColor: follow ? "blue" : "red",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            onPress={handleFollow}
-          >
-            <AntDesign
-              name={follow ? "check" : "plus"}
-              size={14}
-              color="white"
-            />
-          </Button>
+          {!isUser ? (
+            <Button
+              style={{
+                position: "absolute",
+                left: 16,
+                bottom: -9,
+                paddingVertical: 1,
+                paddingHorizontal: 2,
+                borderRadius: 12,
+                backgroundColor: follow ? "blue" : "red",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onPress={handleFollow}
+            >
+              <AntDesign
+                name={isFollow ? "check" : "plus"}
+                size={14}
+                color="white"
+              />
+            </Button>
+          ) : null}
         </View>
         <Text
           style={{

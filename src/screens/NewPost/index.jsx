@@ -23,7 +23,6 @@ const NewPost = () => {
   const [images, setImages] = useState([]);
   const [description, setDescription] = useState("");
 
-  const [data, setData] = useState([]);
   const [userInfo, setUserInfo] = useState({});
 
   useEffect(() => {
@@ -47,12 +46,12 @@ const NewPost = () => {
     });
     result.assets.map((item) => {
       if (item.uri.includes("video"))
-        data.push({
+        images.push({
           type: "video",
           src: item.base64,
         });
       else
-        data.push({
+        images.push({
           type: "image",
           src: item.base64,
         });
@@ -66,16 +65,14 @@ const NewPost = () => {
   const handelCreatePost = () => {
     try {
       let newPost = {
-        items: data,
+        items: images,
         description: description,
       };
-
-      console.log("newPost", newPost);
       apiContext.createPost(newPost).then((res) => {
         console.log(res);
-        // setData([]);
-        // setDescription("");
       });
+      setImages([]);
+      setDescription("");
     } catch (error) {
       console.log(error);
       Alert.alert("Có lỗi xảy ra.");

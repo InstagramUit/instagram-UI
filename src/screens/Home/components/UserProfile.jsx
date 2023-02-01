@@ -20,7 +20,8 @@ import { FlatList } from "react-native-gesture-handler";
 
 const UserProfile = (props) => {
   const user_id = props.route.params.user_id;
-  console.log("props :>> ", props);
+  const isFollow = props.route.params.isFollow;
+
   const gradient = `linear-gradient(to top, black, white )`;
   const [userInfo, setUserInfo] = useState({});
   useEffect(() => {
@@ -133,68 +134,13 @@ const UserProfile = (props) => {
                   post={item.item}
                   userName={userInfo.display_name}
                   userAvt={userInfo.avatar}
+                  isFollow={isFollow}
                   key={item.index}
                 />
               );
             }}
             keyExtractor={(item) => item.id}
           />
-          {/* {DATA.map((item) => {
-            if (item.urls[0].type == "image") {
-              return (
-                <TouchableOpacity
-                  key={item}
-                  style={{
-                    width: 120,
-                    height: 120,
-                    borderRadius: 8,
-                    overflow: "hidden",
-                    marginHorizontal: 4,
-                    marginVertical: 4,
-                  }}
-                >
-                  <Image
-                    style={styles.img}
-                    resizeMethod="scale"
-                    resizeMode="cover"
-                    source={{
-                      uri: item.urls[0].url,
-                    }}
-                  />
-                </TouchableOpacity>
-              );
-            } else if (item.urls[0].type == "video") {
-              return (
-                <TouchableOpacity
-                  style={{
-                    width: 160,
-                    height: 160,
-                    borderRadius: 8,
-                    overflow: "hidden",
-                    marginHorizontal: 16,
-                    marginVertical: 16,
-                  }}
-                >
-                  <Video
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      justifyContent: "center",
-                    }}
-                    resizeMethod="scale"
-                    resizeMode="contain"
-                    shouldPlay
-                    source={{
-                      uri: "https://anhdepfree.com/wp-content/uploads/2020/11/hinh-nen-phong-canh.jpg",
-                    }}
-                    videoStyle={{ position: "relative" }}
-                    isLooping
-                    shouldRasterizeIOS={true}
-                  />
-                </TouchableOpacity>
-              );
-            }
-          })} */}
         </ScrollView>
       ) : (
         <View
