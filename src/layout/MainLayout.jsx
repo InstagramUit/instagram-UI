@@ -1,5 +1,7 @@
 import Home from "../screens/Home";
 import UserProfile from "../screens/Home/components/UserProfile";
+import Chat from "../screens/Chat";
+import Messaging from "../screens/Messaging";
 import Search from "../screens/Search";
 import NewPost from "../screens/NewPost";
 import Notification from "../screens/Notification";
@@ -7,15 +9,16 @@ import Profile from "../screens/Profile";
 import ProfileSetting from "../screens/ProfileSetting";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StyleSheet, Text, View, Image } from "react-native";
 import logo from "../../assets/logo.jpg";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
 
-const MainLayout = () => {
+const MainLayout = ({ navigation }) => {
   return (
     <Tabs.Navigator>
       <Tabs.Screen
@@ -34,6 +37,22 @@ const MainLayout = () => {
             width: 161,
             display: "flex",
             alignItems: "center",
+            paddingHorizontal: 16,
+          },
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Chat");
+              }}
+            >
+              <AntDesign name="message1" size={24} color="black" />
+            </TouchableOpacity>
+          ),
+          headerRightContainerStyle: {
+            height: "100%",
+            width: 161,
+            display: "flex",
+            alignItems: "flex-end",
             paddingHorizontal: 16,
           },
           tabBarLabel: "",
@@ -145,6 +164,8 @@ const HomeScreen = () => {
     >
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="UserProfile" component={UserProfile} />
+      <Stack.Screen name="Chat" component={Chat} />
+      <Stack.Screen name="Messaging" component={Messaging} />
     </Stack.Navigator>
   );
 };

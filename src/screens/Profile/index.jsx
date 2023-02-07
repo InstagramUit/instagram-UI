@@ -322,7 +322,6 @@ const Profile = ({ navigation }) => {
             // marginTop: 16,
           }}
         >
-          {console.log("posts", userInfo.posts)}
           <FlatList
             data={userInfo.posts}
             // pagingEnabled
