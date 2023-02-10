@@ -1,6 +1,6 @@
 import React from "react";
 import { SearchBar } from "@rneui/themed";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { useState } from "react";
 import { apiContext } from "../../contexts/api.context";
 import {
@@ -66,17 +66,55 @@ const Search = ({ navigation }) => {
             data={listUsers}
             renderItem={({ item }) => {
               return (
-                <Text
-                  style={styles.item}
-                  onPress={() => {
-                    navigation.navigate("UserProfile", {
-                      user_id: item.id,
-                      isFollow: item.isFollowing,
-                    });
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    paddingHorizontal: 16,
+                    paddingVertical: 4,
+                    alignItems: "center",
                   }}
                 >
-                  {item.display_name}
-                </Text>
+                  <Image
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: 25,
+                      borderWidth: 1,
+                      borderColor: "#fff",
+                    }}
+                    source={{
+                      uri:
+                        item.avatar ||
+                        "https://res.cloudinary.com/dhz4hr8dq/image/upload/v1669695868/images_xigv3c.jpg",
+                    }}
+                  />
+                  <Text
+                    style={styles.item}
+                    onPress={() => {
+                      navigation.navigate("UserProfile", {
+                        user_id: item.id,
+                        isFollow: item.isFollowing,
+                      });
+                    }}
+                  >
+                    {item.display_name}
+                  </Text>
+                  {console.log(item.isFollowing)}
+                  {item.isFollowing ? (
+                    <View
+                      style={{
+                        borderRadius: 12,
+                        backgroundColor: "blue",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <AntDesign name={"check"} size={14} color="white" />
+                    </View>
+                  ) : null}
+                </View>
               );
             }}
           />
