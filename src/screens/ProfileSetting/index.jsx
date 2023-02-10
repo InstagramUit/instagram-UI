@@ -14,8 +14,12 @@ import {
 import { Button } from "react-native-ios-kit";
 import Gradient from "react-native-css-gradient";
 import * as ImagePicker from "expo-image-picker";
+import { onChange } from "react-native-reanimated";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ProfileSetting = () => {
+  const [updateInfo, setUpdateInfo] = useState({});
+  const [disabled, setDisabled] = useState(true);
   const gradient = `linear-gradient(to top, black, white )`;
   const [userInfo, setUserInfo] = useState({});
   useEffect(() => {
@@ -46,15 +50,37 @@ const ProfileSetting = () => {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsMultipleSelection: true,
       selectionLimit: 5,
+      allowsEditing: true,
+      orderedSelection: true,
+      base64: true,
     });
-
     console.log(result);
 
+    setDisabled(false);
+    setUpdateInfo({
+      ...updateInfo,
+      avatar: result.assets[0].uri,
+    });
     if (!result.canceled) {
-      setImages(result.assets);
+      console.log("error");
     }
   };
 
+  const handleUpdateInfo = () => {
+    console.log(updateInfo);
+    apiContext.updateInfoUser(updateInfo).then((res) => {
+      console.log(res);
+      if (res?.message == "success") {
+        // đổi qua trang profile
+        navigation.navigate("Profile");
+      } else {
+        Alert.alert("Có lỗi xảy ra.");
+      }
+    });
+    navigation.navigate("MainScreen", {
+      screen: "Home",
+    });
+  };
   return (
     <SafeAreaView style={{ width: "100%", height: "100%", flex: 1 }}>
       <View style={styles.header_container}>
@@ -125,16 +151,22 @@ const ProfileSetting = () => {
       </View>
       <View>
         <View style={styles.container}>
-          {console.log("userInfo", userInfo)}
           <View>
             <View>
               <Text style={styles.text_header}>Username</Text>
               <TextInput
                 style={styles.input}
                 placeholder={userInfo.display_name}
+                onChange={(e) => {
+                  setUpdateInfo({
+                    ...updateInfo,
+                    display_name: e.target.value,
+                  });
+                  setDisabled(false);
+                }}
               />
             </View>
-            <View style={styles.input_container}>
+            {/* <View style={styles.input_container}>
               <Text style={styles.text_header}>Email</Text>
               <TextInput style={styles.input} placeholder="Enter your email" />
             </View>
@@ -151,16 +183,13 @@ const ProfileSetting = () => {
                 style={styles.input}
                 placeholder="Enter your password"
               />
-            </View>
+            </View> */}
           </View>
           <View style={{ marginTop: 24 }}>
             <Button
-              style={styles.btn}
-              onPress={() => {
-                navigation.navigate("MainScreen", {
-                  screen: "Home",
-                });
-              }}
+              disabled={disabled}
+              style={disabled ? styles.btn_disabled : styles.btn}
+              onPress={handleUpdateInfo}
               children={
                 <Text style={[styles.btn_text, { letterSpacing: 1 }]}>
                   Save
@@ -170,6 +199,27 @@ const ProfileSetting = () => {
           </View>
         </View>
       </View>
+      <TouchableOpacity
+        style={{
+          width: "100%",
+          position: "absolute",
+          bottom: 0,
+          backgroundColor: "#fff",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: 16,
+          borderTopWidth: 0.5,
+          borderTopColor: "#ccc",
+        }}
+        onPress={() => {
+          navigation.navigate("Authentication");
+          AsyncStorage.setItem("access-token", "");
+        }}
+      >
+        <Text>Sign out</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -265,6 +315,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     textAlign: "center",
     backgroundColor: "#0D8BE7",
+    color: "#ffffff",
+  },
+  btn_disabled: {
+    width: "100%",
+    borderRadius: 24,
+    padding: 16,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    backgroundColor: "#0D8BE7",
+    opacity: 0.5,
     color: "#ffffff",
   },
   btn_text: {

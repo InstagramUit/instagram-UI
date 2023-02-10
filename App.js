@@ -13,6 +13,9 @@ import logo from "./assets/logo.jpg";
 import MainLayout from "./src/layout/MainLayout";
 import store from "./store";
 import { Provider } from "react-redux";
+import * as moment from "moment";
+
+// moment.locale("vi");
 
 const Stack = createNativeStackNavigator();
 const AuthStack = createStackNavigator();

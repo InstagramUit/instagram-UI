@@ -16,11 +16,18 @@ import { Button } from "react-native-ios-kit";
 
 import { apiContext } from "../../contexts/api.context";
 
-const NewPost = () => {
+const NewPost = ({ navigation }) => {
   const windowHeight = Dimensions.get("screen").height;
   const bottomTabHeight = useBottomTabBarHeight();
   const headerHeight = useHeaderHeight();
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState([
+    // {
+    // base64:'',
+    // uri:'',
+    // type:'',
+    // src:''
+    // }
+  ]);
   const [description, setDescription] = useState("");
 
   const [userInfo, setUserInfo] = useState({});
@@ -45,20 +52,20 @@ const NewPost = () => {
       base64: true,
     });
     result.assets.map((item) => {
-      if (item.uri.includes("video"))
-        images.push({
-          type: "video",
-          src: item.base64,
-        });
-      else
-        images.push({
-          type: "image",
-          src: item.base64,
-        });
+      console.log(item);
+      setImages((preImages) => [
+        ...preImages,
+        {
+          base64: item.base64,
+          uri: item.uri,
+          type: item.uri.includes("video") ? "video" : "image",
+          src: item.uri,
+        },
+      ]);
     });
 
     if (!result.canceled) {
-      setImages(result.assets);
+      // setImages(result.assets);
     }
   };
 
@@ -68,8 +75,15 @@ const NewPost = () => {
         items: images,
         description: description,
       };
+      console.log(newPost);
       apiContext.createPost(newPost).then((res) => {
         console.log(res);
+        if (res?.message == "success") {
+          // đổi qua trang profile
+          navigation.navigate("Profile");
+        } else {
+          Alert.alert("Có lỗi xảy ra.");
+        }
       });
       setImages([]);
       setDescription("");
@@ -81,15 +95,7 @@ const NewPost = () => {
 
   return (
     <SafeAreaView style={{ height: "100%", backgroundColor: "#fff" }}>
-      {/* {images.map((item) => {
-        return (
-          <Image
-            source={{ uri: item.uri }}
-            style={{ width: 200, height: 200 }}
-          />
-        );
-      })} */}
-      {images.length > 0 ? (
+      {Array.isArray(images) && images.length > 0 ? (
         <PageControlView
           defaultPage={1}
           style={{ display: "flex" }}
@@ -98,11 +104,10 @@ const NewPost = () => {
             height: 300,
           }}
         >
-          {images.map((item) => {
-            // if (item.type == "image") {
+          {images.map((item, index) => {
             return (
               <Image
-                key={item}
+                key={index}
                 style={styles.img}
                 resizeMethod="scale"
                 resizeMode="center"
@@ -111,27 +116,6 @@ const NewPost = () => {
                 }}
               />
             );
-            // } else if (item.type == "video") {
-            //   return (
-            //     <Video
-            //       ref={ref}
-            //       style={{
-            //         width: "100%",
-            //         height: "100%",
-            //         justifyContent: "center",
-            //       }}
-            //       resizeMethod="scale"
-            //       resizeMode="contain"
-            //       shouldPlay
-            //       source={{
-            //         uri: item.url,
-            //       }}
-            //       videoStyle={{ position: "relative" }}
-            //       isLooping
-            //       shouldRasterizeIOS={true}
-            //     />
-            //   );
-            // }
           })}
         </PageControlView>
       ) : (
@@ -219,3 +203,4 @@ const styles = StyleSheet.create({
     color: "#ffffff",
   },
 });
+// Viết cho Hiếu

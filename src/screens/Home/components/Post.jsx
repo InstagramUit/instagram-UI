@@ -22,6 +22,7 @@ import VideoPlayer from "expo-video-player";
 import { useDispatch, useSelector } from "react-redux";
 import { apiContext } from "../../../contexts/api.context";
 import CommentModal from "../../../components/CommentModal";
+import * as moment from "moment";
 
 const WINDOW_WIDTH = Dimensions.get("window").width;
 const WINDOW_HEIGHT = Dimensions.get("window").height;
@@ -160,16 +161,29 @@ const Post = (props) => {
             </Button>
           ) : null}
         </View>
-        <Text
-          style={{
-            fontSize: 18,
-            fontWeight: "500",
-            marginLeft: 16,
-            color: "#292929",
-          }}
-        >
-          @{userName}
-        </Text>
+        <View>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "500",
+              marginLeft: 16,
+              color: "#292929",
+            }}
+          >
+            {userName}
+          </Text>
+          <Text
+            style={{
+              marginLeft: 16,
+            }}
+          >
+            {moment(post.created_at)
+              .utcOffset(420)
+              .locale("vi")
+              .startOf("minute")
+              .fromNow()}
+          </Text>
+        </View>
       </View>
       <PageControlView
         // defaultPage={1}

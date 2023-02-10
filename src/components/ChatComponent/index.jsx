@@ -2,10 +2,12 @@ import React from "react";
 import { TouchableOpacity, View, Image, Text } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { useState } from "react";
+import * as moment from "moment";
 
 const ChatComponent = (props) => {
-  const [avatar, setAvatar] = useState(true);
-  const [messages, setMessages] = useState({});
+  const [messages, setMessages] = useState(props.item.message);
+
+  const time = moment(new Date(messages[0].created_at)).utc().format("hh:mm");
 
   return (
     <TouchableOpacity
@@ -17,7 +19,10 @@ const ChatComponent = (props) => {
         paddingHorizontal: 16,
       }}
       onPress={() => {
-        props.navigation.navigate("Messaging");
+        props.navigation.navigate("Messaging", {
+          user: props.item.user,
+          messages: props.item.message,
+        });
       }}
     >
       <View
@@ -29,9 +34,17 @@ const ChatComponent = (props) => {
           alignItems: "center",
           justifyContent: "center",
           marginRight: 16,
+          overflow: "hidden",
         }}
       >
-        {avatar ? (
+        {props.item.user.avatar ? (
+          <Image
+            style={{ width: "100%", height: "100%" }}
+            source={{
+              uri: props.item.user.avatar,
+            }}
+          />
+        ) : (
           <View
             style={{
               width: "100%",
@@ -46,12 +59,6 @@ const ChatComponent = (props) => {
           >
             <FontAwesome name="user" size={24} color="black" />
           </View>
-        ) : (
-          <Image
-            source={{
-              uri: "https://1.vikiplatform.com/pr/23994pr/6ff3202a20.jpg?x=b&s=590x330&q=h&e=t&f=t&cb=1",
-            }}
-          />
         )}
       </View>
       <View
@@ -71,7 +78,7 @@ const ChatComponent = (props) => {
               marginBottom: 4,
             }}
           >
-            Kim Lien
+            {props.item.user.display_name}
           </Text>
           <Text
             style={{
@@ -80,11 +87,11 @@ const ChatComponent = (props) => {
               opacity: 0.7,
             }}
           >
-            {messages?.text ? messages.text : "Tap to start chatting"}
+            {messages ? messages[0].content : "Tap to start chatting"}
           </Text>
         </View>
         <View>
-          <Text>{messages?.time ? messages.time : "now"}</Text>
+          <Text>{messages ? time : "now"}</Text>
         </View>
       </View>
     </TouchableOpacity>

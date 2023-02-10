@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,9 +9,32 @@ import {
 } from "react-native";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import MessageComponent from "../../components/MessageComponent";
+import { apiContext } from "../../contexts/api.context";
 
-const Messaging = ({ navigation }) => {
+const Messaging = (props) => {
+  console.log(props);
   const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState(props.route.params.messages || []);
+
+  const handleMessage = () => {
+    setMessages([
+      {
+        content: message,
+        created_at: new Date().getTime(),
+      },
+    ]);
+    try {
+      apiContext
+        .createNewMessage(props.route.params.user.id, message)
+        .then((res) => {
+          console.log(res);
+        });
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Có lỗi xảy ra.");
+    }
+    setMessage("");
+  };
   return (
     <SafeAreaView style={{ height: "100%" }}>
       <View
@@ -28,7 +51,7 @@ const Messaging = ({ navigation }) => {
             color="black"
             onPress={() => {
               console.log("test");
-              navigation.goBack();
+              props.navigation.goBack();
             }}
           />
         </TouchableOpacity>
@@ -40,11 +63,18 @@ const Messaging = ({ navigation }) => {
             fontWeight: "500",
           }}
         >
-          Username
+          {props.route.params.user.display_name}
         </Text>
       </View>
       <ScrollView>
-        <MessageComponent />
+        {messages?.map((item) => {
+          return (
+            <MessageComponent
+              avt={props.route.params.user.avatar}
+              item={item}
+            />
+          );
+        })}
       </ScrollView>
       <View
         style={{
@@ -64,18 +94,13 @@ const Messaging = ({ navigation }) => {
             marginRight: 16,
             borderRadius: 8,
           }}
-          placeholder="Messaging..."
+          placeholder="Typing..."
           value={message}
           onChange={(e) => {
             setMessage(e.target.value);
           }}
         />
-        <TouchableOpacity
-          onPress={() => {
-            console.log(message);
-            setMessage("");
-          }}
-        >
+        <TouchableOpacity onPress={handleMessage}>
           <Feather name="send" size={24} color="black" />
         </TouchableOpacity>
       </View>

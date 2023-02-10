@@ -13,8 +13,21 @@ import { Feather } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { apiContext } from "../../contexts/api.context";
+import * as moment from "moment";
+
 const CommentModal = (props) => {
-  const { showModal, setShowModal, onTouchOutside, userAvt, post } = props;
+  const { showModal, setShowModal, onTouchOutside, post } = props;
+
+  const [userInfo, setUserInfo] = useState({});
+  useEffect(() => {
+    const fetchData = async () => {
+      let result = await apiContext.getInfoUser();
+      // setPosts(result.data?.posts || []);
+      setUserInfo(result.data);
+    };
+    fetchData().catch((err) => console.log(err));
+  }, []);
+
   const windowHeight = Dimensions.get("window").height;
   const renderOutsideTouchable = (onTouchOutside) => {
     const view = <View style={{ flex: 1, width: "100%" }} />;
@@ -144,6 +157,13 @@ const CommentModal = (props) => {
                           {item.content}
                         </Text>
                       </View>
+                      <Text>
+                        {moment(item.created_at)
+                          .utcOffset(420)
+                          .locale("vi")
+                          .startOf("minute")
+                          .fromNow()}
+                      </Text>
                     </View>
                   );
                 })}
@@ -178,11 +198,9 @@ const CommentModal = (props) => {
           }}
         >
           <Image
-            style={{ width: 36, height: 36, borderRadius: 16, marginRight: 16 }}
+            style={{ width: 36, height: 36, borderRadius: 30, marginRight: 16 }}
             source={{
-              uri:
-                userAvt ||
-                "https://res.cloudinary.com/dhz4hr8dq/image/upload/v1669695868/images_xigv3c.jpg",
+              uri: userInfo.avatar,
             }}
           />
           <View
@@ -201,7 +219,7 @@ const CommentModal = (props) => {
             }}
           >
             <TextInput
-              style={{ fontSize: 16 }}
+              style={{ fontSize: 16, width: "100%" }}
               placeholder="Add comment"
               value={content}
               onChange={(e) => setContent(e.nativeEvent.text)}
