@@ -32,9 +32,13 @@ const Chat = ({ navigation }) => {
   const onChangeSearch = async (value) => {
     try {
       setSearch(value);
-      let listUsers = await apiContext.search(value);
-      console.log(listUsers.data);
-      setListUsers(listUsers.data);
+      if (value !== "") {
+        let listUsers = await apiContext.search(value);
+        console.log(listUsers.data);
+        setListUsers(listUsers.data);
+      } else {
+        setListUsers([]);
+      }
     } catch (error) {
       console.log(error);
       Alert.alert("Search không thành công");
@@ -43,35 +47,6 @@ const Chat = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ height: "100%" }}>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          padding: 16,
-        }}
-      >
-        <TouchableOpacity>
-          <AntDesign
-            name="arrowleft"
-            size={24}
-            color="black"
-            onPress={() => {
-              console.log("test");
-              navigation.goBack();
-            }}
-          />
-        </TouchableOpacity>
-        <Text
-          style={{
-            flex: 1,
-            textAlign: "center",
-            fontSize: 20,
-            fontWeight: "500",
-          }}
-        >
-          Chats
-        </Text>
-      </View>
       <View>
         <SearchBar
           value={search}
@@ -93,6 +68,7 @@ const Chat = ({ navigation }) => {
           }}
         />
         <View style={styles.container}>
+          {console.log(listUsers)}
           <FlatList
             data={listUsers}
             renderItem={({ item }) => {
@@ -109,6 +85,7 @@ const Chat = ({ navigation }) => {
                   onPress={() => {
                     navigation.navigate("Messaging", {
                       user: item,
+                      messages: item.messages,
                     });
                   }}
                 >
@@ -147,6 +124,36 @@ const Chat = ({ navigation }) => {
           />
         </View>
       </View>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          padding: 16,
+        }}
+      >
+        <TouchableOpacity>
+          <AntDesign
+            name="arrowleft"
+            size={24}
+            color="black"
+            onPress={() => {
+              console.log("test");
+              navigation.goBack();
+            }}
+          />
+        </TouchableOpacity>
+        <Text
+          style={{
+            flex: 1,
+            textAlign: "center",
+            fontSize: 20,
+            fontWeight: "500",
+          }}
+        >
+          Chats
+        </Text>
+      </View>
+
       <ScrollView>
         <FlatList
           data={listChat}

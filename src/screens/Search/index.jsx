@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { SearchBar } from "@rneui/themed";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { useState } from "react";
@@ -20,9 +20,13 @@ const Search = ({ navigation }) => {
   const onChangeSearch = async (value) => {
     try {
       setSearch(value);
-      let listUsers = await apiContext.search(value);
-      console.log(listUsers.data);
-      setListUsers(listUsers.data);
+      if (value !== "") {
+        let listUsers = await apiContext.search(value);
+        console.log(listUsers.data);
+        setListUsers(listUsers.data);
+      } else {
+        setListUsers([]);
+      }
     } catch (error) {
       console.log(error);
       Alert.alert("Search không thành công");
@@ -96,7 +100,6 @@ const Search = ({ navigation }) => {
                     }}
                   />
                   <Text style={styles.item}>{item.display_name}</Text>
-                  {console.log(item.isFollowing)}
                   {item.isFollowing ? (
                     <View
                       style={{
