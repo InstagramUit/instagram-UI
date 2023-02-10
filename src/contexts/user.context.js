@@ -29,7 +29,7 @@ export const userContext = {
   search:async (data)=>{
     const value = await AsyncStorage.getItem("access-token");
     api.defaults.headers.Authorization = `Bearer ${value}`;
-    const response = api.get('/search',data);
+    const response = api.get('/users/search?name='+data);
     return response;
   },
 };
