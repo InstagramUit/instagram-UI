@@ -22,7 +22,7 @@ import VideoPlayer from "expo-video-player";
 import { useDispatch, useSelector } from "react-redux";
 import { apiContext } from "../../../contexts/api.context";
 import CommentModal from "../../../components/CommentModal";
-import * as moment from "moment";
+import moment from 'moment'
 
 const WINDOW_WIDTH = Dimensions.get("window").width;
 const WINDOW_HEIGHT = Dimensions.get("window").height;

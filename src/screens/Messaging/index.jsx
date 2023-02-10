@@ -17,12 +17,13 @@ const Messaging = (props) => {
   const [messages, setMessages] = useState(props.route.params.messages || []);
 
   const handleMessage = () => {
-    setMessages([
+    setMessages(preMessages=>([
+      ...preMessages,
       {
         content: message,
         created_at: new Date().getTime(),
       },
-    ]);
+    ]));
     try {
       apiContext
         .createNewMessage(props.route.params.user.id, message)

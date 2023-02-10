@@ -13,7 +13,7 @@ import { Feather } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { apiContext } from "../../contexts/api.context";
-import * as moment from "moment";
+import moment from "moment";
 
 const CommentModal = (props) => {
   const { showModal, setShowModal, onTouchOutside, post } = props;

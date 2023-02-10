@@ -31,7 +31,7 @@ export default function App() {
               headerShown: false,
             }}
           >
-            {/* <Stack.Screen name="Authentication" component={Authentication} /> */}
+            <Stack.Screen name="Authentication" component={Authentication} />
             <Stack.Screen name="MainScreen" component={MainLayout} />
           </Stack.Navigator>
         </NavigationContainer>
