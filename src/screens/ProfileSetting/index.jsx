@@ -22,6 +22,7 @@ const ProfileSetting = () => {
   const [disabled, setDisabled] = useState(true);
   const gradient = `linear-gradient(to top, black, white )`;
   const [userInfo, setUserInfo] = useState({});
+  const [userAvt, setUserAvt] = useState(userInfo.avatar | "");
   useEffect(() => {
     const fetchData = async () => {
       let result = await apiContext.getInfoUser();
@@ -61,6 +62,7 @@ const ProfileSetting = () => {
       ...updateInfo,
       avatar: result.assets[0].uri,
     });
+    setUserAvt(result.assets[0].uri);
     if (!result.canceled) {
       console.log("error");
     }
@@ -87,7 +89,7 @@ const ProfileSetting = () => {
         <Image
           style={{ width: "100%", height: 240 }}
           source={{
-            uri: userInfo.avatar,
+            uri: userAvt,
           }}
         />
         <View style={styles.info_container}>
@@ -101,7 +103,7 @@ const ProfileSetting = () => {
                 borderColor: "#ffffff",
               }}
               source={{
-                uri: userInfo.avatar,
+                uri: userAvt,
               }}
             />
             <TouchableOpacity style={styles.avt_setting}>

@@ -8,6 +8,7 @@ import {
   FlatList,
   Alert,
   StyleSheet,
+  Image,
 } from "react-native";
 import { SearchBar } from "@rneui/themed";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
@@ -96,16 +97,51 @@ const Chat = ({ navigation }) => {
             data={listUsers}
             renderItem={({ item }) => {
               return (
-                <Text
-                  style={styles.item}
+                <TouchableOpacity
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    paddingHorizontal: 16,
+                    paddingVertical: 4,
+                    alignItems: "center",
+                    backgroundColor: "white",
+                  }}
                   onPress={() => {
                     navigation.navigate("Messaging", {
                       user: item,
                     });
                   }}
                 >
-                  {item.display_name}
-                </Text>
+                  <Image
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: 25,
+                      borderWidth: 1,
+                      borderColor: "#fff",
+                    }}
+                    source={{
+                      uri:
+                        item.avatar ||
+                        "https://res.cloudinary.com/dhz4hr8dq/image/upload/v1669695868/images_xigv3c.jpg",
+                    }}
+                  />
+                  <Text style={styles.item}>{item.display_name}</Text>
+                  {console.log(item.isFollowing)}
+                  {item.isFollowing ? (
+                    <View
+                      style={{
+                        borderRadius: 12,
+                        backgroundColor: "blue",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <AntDesign name={"check"} size={14} color="white" />
+                    </View>
+                  ) : null}
+                </TouchableOpacity>
               );
             }}
           />
@@ -128,7 +164,6 @@ export default Chat;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 22,
   },
   item: {
     padding: 10,

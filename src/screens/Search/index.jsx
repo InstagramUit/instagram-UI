@@ -66,13 +66,19 @@ const Search = ({ navigation }) => {
             data={listUsers}
             renderItem={({ item }) => {
               return (
-                <View
+                <TouchableOpacity
                   style={{
                     display: "flex",
                     flexDirection: "row",
                     paddingHorizontal: 16,
                     paddingVertical: 4,
                     alignItems: "center",
+                  }}
+                  onPress={() => {
+                    navigation.navigate("UserProfile", {
+                      user_id: item.id,
+                      isFollow: item.isFollowing,
+                    });
                   }}
                 >
                   <Image
@@ -89,17 +95,7 @@ const Search = ({ navigation }) => {
                         "https://res.cloudinary.com/dhz4hr8dq/image/upload/v1669695868/images_xigv3c.jpg",
                     }}
                   />
-                  <Text
-                    style={styles.item}
-                    onPress={() => {
-                      navigation.navigate("UserProfile", {
-                        user_id: item.id,
-                        isFollow: item.isFollowing,
-                      });
-                    }}
-                  >
-                    {item.display_name}
-                  </Text>
+                  <Text style={styles.item}>{item.display_name}</Text>
                   {console.log(item.isFollowing)}
                   {item.isFollowing ? (
                     <View
@@ -114,7 +110,7 @@ const Search = ({ navigation }) => {
                       <AntDesign name={"check"} size={14} color="white" />
                     </View>
                   ) : null}
-                </View>
+                </TouchableOpacity>
               );
             }}
           />
