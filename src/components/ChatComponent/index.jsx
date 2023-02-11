@@ -1,13 +1,14 @@
+import moment from 'moment-timezone'
+import 'moment/locale/vi'
 import React from "react";
 import { TouchableOpacity, View, Image, Text } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { useState } from "react";
-import * as moment from "moment";
 
 const ChatComponent = (props) => {
   const [messages, setMessages] = useState(props.item.message);
 
-  const time = moment(new Date(messages[0].created_at)).utc().format("hh:mm");
+  const time = moment(new Date(props.item.message[0].created_at)).utc().format("hh:mm");
 
   return (
     <TouchableOpacity
@@ -22,6 +23,7 @@ const ChatComponent = (props) => {
         props.navigation.navigate("Messaging", {
           user: props.item.user,
           messages: props.item.message,
+          userInfo:props.userInfo
         });
       }}
     >

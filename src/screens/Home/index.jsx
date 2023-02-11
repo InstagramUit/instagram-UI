@@ -10,9 +10,11 @@ import {
 import Header from "../../components/Header";
 import Post from "./components/Post";
 import { apiContext } from "../../contexts/api.context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Home = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
+  const [infoUser, setInfoUSer] = useState({})
   const [DATA, setData] = useState([
     {
       id: 1,
@@ -44,6 +46,10 @@ const Home = ({ navigation }) => {
     const fetchData = async () => {
       let result = await apiContext.getPosts();
       setPosts(result.data?.posts || []);
+
+      let a = await AsyncStorage.getItem('info-user')
+      console.log(JSON.parse(a))
+      setInfoUSer(JSON.parse(a))
     };
     fetchData().catch((err) => console.log(err));
   }, []);
@@ -69,6 +75,7 @@ const Home = ({ navigation }) => {
               userName={item.item.display_name}
               userAvt={item.item.avatar}
               isFollow={item.item.follow}
+              infoUser={infoUser}
               key={item.index}
             />
           );

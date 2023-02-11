@@ -40,6 +40,7 @@ const SignIn = (props) => {
       let user = result.user;
       dispatch(updateInfoUser(user));
       await AsyncStorage.setItem("access-token", user.accessToken);
+      await AsyncStorage.setItem("info-user", JSON.stringify(user));
       Alert.alert("Đăng nhập thành công");
       navigation.navigate("MainScreen", {
         screen: "Home",

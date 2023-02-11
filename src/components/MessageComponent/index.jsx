@@ -1,24 +1,25 @@
+import moment from "moment-timezone";
+import "moment/locale/vi";
 import React from "react";
 import { TouchableOpacity, View, Image, Text } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
 import { apiContext } from "../../contexts/api.context";
-import * as moment from "moment";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const MessageComponent = (props) => {
-  const [userInfo, setUserInfo] = useState({});
+  
+ 
+  const [avatar, setAvatar] = useState(props.avt);
+  const [isUser, setIsUser] = useState("");
+  const [time, setTime] = useState("");
+
   useEffect(() => {
-    const fetchData = async () => {
-      let result = await apiContext.getInfoUser();
-      // setPosts(result.data?.posts || []);
-      setUserInfo(result.data);
-    };
-    fetchData().catch((err) => console.log(err));
+    // console.log(props)
+    setIsUser(props.userInfo.id === props.item.from_id ? true : false);
+    setTime(moment(new Date(props.item.created_at)).utc().add(2, 'hours').format("hh:mm"));
   }, []);
 
-  const isUser = userInfo.id === props.item.from_id ? true : false;
-  const [avatar, setAvatar] = useState(props.avt);
-  const time = moment(new Date(props.item.created_at)).utc().format("hh:mm");
   return (
     <View>
       {isUser ? (
@@ -55,9 +56,7 @@ const MessageComponent = (props) => {
                   color: "white",
                 }}
               >
-                {props.item.content
-                  ? props.item.content
-                  : "Tap to start chatting"}
+                {props.item.content ? props.item.content : "Tap to start chatting"}
               </Text>
             </View>
             <View>
@@ -135,9 +134,7 @@ const MessageComponent = (props) => {
                   color: "white",
                 }}
               >
-                {props.item.content
-                  ? props.item.content
-                  : "Tap to start chatting"}
+                {props.item.content ? props.item.content : "Tap to start chatting"}
               </Text>
             </View>
             <View>

@@ -1,3 +1,5 @@
+import moment from 'moment-timezone'
+import 'moment/locale/vi'
 import React, { useState } from "react";
 import {
   View,
@@ -13,21 +15,13 @@ import { Feather } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { apiContext } from "../../contexts/api.context";
-import moment from "moment";
+
 
 const CommentModal = (props) => {
   const { showModal, setShowModal, onTouchOutside, post } = props;
 
-  const [userInfo, setUserInfo] = useState({});
-  useEffect(() => {
-    const fetchData = async () => {
-      let result = await apiContext.getInfoUser();
-      // setPosts(result.data?.posts || []);
-      setUserInfo(result.data);
-    };
-    fetchData().catch((err) => console.log(err));
-  }, []);
 
+  
   const windowHeight = Dimensions.get("window").height;
   const renderOutsideTouchable = (onTouchOutside) => {
     const view = <View style={{ flex: 1, width: "100%" }} />;
@@ -42,7 +36,7 @@ const CommentModal = (props) => {
     );
   };
   // render comments
-  const user = useSelector((state) => state.user);
+
   const [comments, setComments] = useState(props.comments);
 
   const [content, setContent] = useState("");
@@ -54,17 +48,15 @@ const CommentModal = (props) => {
     console.log(data);
     apiContext.createCommentPost(data).then((res) => {
       let newComments = {
-        avatar: user.avatar,
-        display_name: user.display_name,
+        avatar: props.infoUser.avatar,
+        display_name: props.infoUser.display_name,
         content: data.content,
       };
       setComments((preComments) => [...preComments, newComments]);
       setContent("");
     });
   };
-  useEffect(() => {
-    console.log(user);
-  }, []);
+ 
   return (
     <Modal
       animationType={"fade"}
@@ -159,8 +151,6 @@ const CommentModal = (props) => {
                       </View>
                       <Text>
                         {moment(item.created_at)
-                          .utcOffset(420)
-                          .locale("vi")
                           .startOf("minute")
                           .fromNow()}
                       </Text>
@@ -200,7 +190,7 @@ const CommentModal = (props) => {
           <Image
             style={{ width: 36, height: 36, borderRadius: 30, marginRight: 16 }}
             source={{
-              uri: userInfo.avatar,
+              uri: props.infoUser.avatar,
             }}
           />
           <View

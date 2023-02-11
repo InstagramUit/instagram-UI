@@ -1,3 +1,5 @@
+import moment from "moment-timezone";
+import "moment/locale/vi";
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -10,18 +12,23 @@ import {
 import { AntDesign, Feather } from "@expo/vector-icons";
 import MessageComponent from "../../components/MessageComponent";
 import { apiContext } from "../../contexts/api.context";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const Messaging = (props) => {
-  console.log(props);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState(props.route.params.messages || []);
+
+  console.log(props)
+
+  useEffect(() => {
+  }, []);
 
   const handleMessage = () => {
     setMessages(preMessages=>([
       ...preMessages,
       {
         content: message,
-        created_at: new Date().getTime(),
+        from_id:props.route.params.userInfo.id,
+        created_at: moment(new Date()).utc().add(5, 'hours'),
       },
     ]));
     try {
@@ -73,6 +80,7 @@ const Messaging = (props) => {
             <MessageComponent
               avt={props.route.params.user.avatar}
               item={item}
+              userInfo={props.route.params.userInfo}
             />
           );
         })}

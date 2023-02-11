@@ -1,3 +1,5 @@
+import moment from 'moment-timezone'
+import 'moment/locale/vi'
 import React, { useEffect, useRef, useState } from "react";
 import { CommonActions } from "@react-navigation/native";
 import {
@@ -22,7 +24,6 @@ import VideoPlayer from "expo-video-player";
 import { useDispatch, useSelector } from "react-redux";
 import { apiContext } from "../../../contexts/api.context";
 import CommentModal from "../../../components/CommentModal";
-import moment from 'moment'
 
 const WINDOW_WIDTH = Dimensions.get("window").width;
 const WINDOW_HEIGHT = Dimensions.get("window").height;
@@ -31,23 +32,15 @@ const Post = (props) => {
   const user = useSelector((state) => state.user);
 
   // props, state
+  console.log(props)
   const { post, userName, userAvt, isFollow, navigation } = props;
 
-  const [userInfo, setUserInfo] = useState({});
-  useEffect(() => {
-    const fetchData = async () => {
-      let result = await apiContext.getInfoUser();
-      // setPosts(result.data?.posts || []);
-      setUserInfo(result.data);
-    };
-    fetchData().catch((err) => console.log(err));
-  }, []);
   const ref = useRef(null);
   const windowHeight = Dimensions.get("screen").height;
   const bottomTabHeight = useBottomTabBarHeight();
   const headerHeight = useHeaderHeight();
 
-  const isUser = userInfo.id === post.id_user ? true : false;
+  const isUser = props.infoUser.id === post.id_user ? true : false;
 
   const [like, setLike] = useState(false);
   const [totalLikes, setTotalLikes] = useState(post.totalLikes);
@@ -178,8 +171,7 @@ const Post = (props) => {
             }}
           >
             {moment(post.created_at)
-              .utcOffset(420)
-              .locale("vi")
+            .subtract(-7,'h')
               .startOf("minute")
               .fromNow()}
           </Text>
@@ -323,6 +315,7 @@ const Post = (props) => {
             onTouchOutside={handleCloseModal}
             comments={post.comments}
             userAvt={post.avatar}
+            infoUser={props.infoUser}
             post={post}
           />
         </View>

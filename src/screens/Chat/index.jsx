@@ -15,14 +15,21 @@ import { AntDesign, Ionicons } from "@expo/vector-icons";
 import ChatComponent from "../../components/ChatComponent";
 import { apiContext } from "../../contexts/api.context";
 import { useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Chat = ({ navigation }) => {
   const [listChat, setListChat] = useState([]);
+  const [userInfo, setUserInfo] = useState({})
+
   useEffect(() => {
     const fetchData = async () => {
       let result = await apiContext.getMessage();
       console.log(result.data);
       setListChat(result.data);
+
+      let a = await AsyncStorage.getItem('info-user')
+      setUserInfo(JSON.parse(a))
+
     };
     fetchData().catch((err) => console.log(err));
   }, []);
@@ -68,7 +75,6 @@ const Chat = ({ navigation }) => {
           }}
         />
         <View style={styles.container}>
-          {console.log(listUsers)}
           <FlatList
             data={listUsers}
             renderItem={({ item }) => {
@@ -86,6 +92,7 @@ const Chat = ({ navigation }) => {
                     navigation.navigate("Messaging", {
                       user: item,
                       messages: item.messages,
+                      userInfo:userInfo
                     });
                   }}
                 >
@@ -158,7 +165,7 @@ const Chat = ({ navigation }) => {
         <FlatList
           data={listChat}
           renderItem={(item) => {
-            return <ChatComponent item={item.item} navigation={navigation} />;
+            return <ChatComponent item={item.item} navigation={navigation} userInfo={userInfo}/>;
           }}
         />
       </ScrollView>

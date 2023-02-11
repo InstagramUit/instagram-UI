@@ -16,217 +16,22 @@ import {
 import Post from "../Home/components/Post";
 import Gradient from "react-native-css-gradient";
 import { FlatList } from "react-native-gesture-handler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Profile = ({ navigation }) => {
   const gradient = `linear-gradient(to top, black, white )`;
-  const [DATA, setData] = useState([
-    {
-      id: 1,
-      urls: [
-        {
-          type: "image",
-          url: "https://anhdepfree.com/wp-content/uploads/2020/11/hinh-nen-phong-canh.jpg",
-        },
-        {
-          type: "image",
-          url: "https://anhdepfree.com/wp-content/uploads/2020/11/hinh-nen-phong-canh.jpg",
-        },
-        {
-          type: "video",
-          url: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4",
-        },
-      ],
-      username: "keem_liennn",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nisleros, pulvinar facilisis justo mollis, auctor consequat urna...",
-      user_avt:
-        "https://www.allkpop.com/upload/2022/06/content/050039/1654403969-yuta-universe-283-29.jpg",
-      likes: 123,
-      isLiked: false,
-      comments: [""],
-    },
-    {
-      id: 2,
-      urls: [
-        {
-          type: "image",
-          url: "https://anhdepfree.com/wp-content/uploads/2020/11/hinh-nen-phong-canh.jpg",
-        },
-        {
-          type: "image",
-          url: "https://anhdepfree.com/wp-content/uploads/2020/11/hinh-nen-phong-canh.jpg",
-        },
-        {
-          type: "video",
-          url: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4",
-        },
-      ],
-      username: "keem_liennn",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nisleros, pulvinar facilisis justo mollis, auctor consequat urna...",
-      user_avt:
-        "https://www.allkpop.com/upload/2022/06/content/050039/1654403969-yuta-universe-283-29.jpg",
-      likes: 123,
-      isLiked: false,
-      comments: [""],
-    },
-    {
-      id: 3,
-      urls: [
-        {
-          type: "image",
-          url: "https://anhdepfree.com/wp-content/uploads/2020/11/hinh-nen-phong-canh.jpg",
-        },
-        {
-          type: "image",
-          url: "https://anhdepfree.com/wp-content/uploads/2020/11/hinh-nen-phong-canh.jpg",
-        },
-        {
-          type: "video",
-          url: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4",
-        },
-      ],
-      username: "keem_liennn",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nisleros, pulvinar facilisis justo mollis, auctor consequat urna...",
-      user_avt:
-        "https://www.allkpop.com/upload/2022/06/content/050039/1654403969-yuta-universe-283-29.jpg",
-      likes: 123,
-      isLiked: false,
-      comments: [""],
-    },
-    {
-      id: 4,
-      urls: [
-        {
-          type: "image",
-          url: "https://anhdepfree.com/wp-content/uploads/2020/11/hinh-nen-phong-canh.jpg",
-        },
-        {
-          type: "image",
-          url: "https://anhdepfree.com/wp-content/uploads/2020/11/hinh-nen-phong-canh.jpg",
-        },
-        {
-          type: "video",
-          url: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4",
-        },
-      ],
-      username: "keem_liennn",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nisleros, pulvinar facilisis justo mollis, auctor consequat urna...",
-      user_avt:
-        "https://www.allkpop.com/upload/2022/06/content/050039/1654403969-yuta-universe-283-29.jpg",
-      likes: 123,
-      isLiked: false,
-      comments: [""],
-    },
-    {
-      id: 1,
-      urls: [
-        {
-          type: "image",
-          url: "https://anhdepfree.com/wp-content/uploads/2020/11/hinh-nen-phong-canh.jpg",
-        },
-        {
-          type: "image",
-          url: "https://anhdepfree.com/wp-content/uploads/2020/11/hinh-nen-phong-canh.jpg",
-        },
-        {
-          type: "video",
-          url: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4",
-        },
-      ],
-      username: "keem_liennn",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nisleros, pulvinar facilisis justo mollis, auctor consequat urna...",
-      user_avt:
-        "https://www.allkpop.com/upload/2022/06/content/050039/1654403969-yuta-universe-283-29.jpg",
-      likes: 123,
-      isLiked: false,
-      comments: [""],
-    },
-    {
-      id: 2,
-      urls: [
-        {
-          type: "image",
-          url: "https://anhdepfree.com/wp-content/uploads/2020/11/hinh-nen-phong-canh.jpg",
-        },
-        {
-          type: "image",
-          url: "https://anhdepfree.com/wp-content/uploads/2020/11/hinh-nen-phong-canh.jpg",
-        },
-        {
-          type: "video",
-          url: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4",
-        },
-      ],
-      username: "keem_liennn",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nisleros, pulvinar facilisis justo mollis, auctor consequat urna...",
-      user_avt:
-        "https://www.allkpop.com/upload/2022/06/content/050039/1654403969-yuta-universe-283-29.jpg",
-      likes: 123,
-      isLiked: false,
-      comments: [""],
-    },
-    {
-      id: 3,
-      urls: [
-        {
-          type: "image",
-          url: "https://anhdepfree.com/wp-content/uploads/2020/11/hinh-nen-phong-canh.jpg",
-        },
-        {
-          type: "image",
-          url: "https://anhdepfree.com/wp-content/uploads/2020/11/hinh-nen-phong-canh.jpg",
-        },
-        {
-          type: "video",
-          url: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4",
-        },
-      ],
-      username: "keem_liennn",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nisleros, pulvinar facilisis justo mollis, auctor consequat urna...",
-      user_avt:
-        "https://www.allkpop.com/upload/2022/06/content/050039/1654403969-yuta-universe-283-29.jpg",
-      likes: 123,
-      isLiked: false,
-      comments: [""],
-    },
-    {
-      id: 4,
-      urls: [
-        {
-          type: "image",
-          url: "https://anhdepfree.com/wp-content/uploads/2020/11/hinh-nen-phong-canh.jpg",
-        },
-        {
-          type: "image",
-          url: "https://anhdepfree.com/wp-content/uploads/2020/11/hinh-nen-phong-canh.jpg",
-        },
-        {
-          type: "video",
-          url: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4",
-        },
-      ],
-      username: "keem_liennn",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nisleros, pulvinar facilisis justo mollis, auctor consequat urna...",
-      user_avt:
-        "https://www.allkpop.com/upload/2022/06/content/050039/1654403969-yuta-universe-283-29.jpg",
-      likes: 123,
-      isLiked: false,
-      comments: [""],
-    },
-  ]);
+  
   const [userInfo, setUserInfo] = useState({});
+
+  const [a,setA] = useState({})
   useEffect(() => {
     const fetchData = async () => {
       let result = await apiContext.getInfoUser();
       // setPosts(result.data?.posts || []);
       setUserInfo(result.data);
+
+      let b = await AsyncStorage.getItem('info-user')
+      setA(b)
     };
     fetchData().catch((err) => console.log(err));
   }, []);
@@ -332,6 +137,7 @@ const Profile = ({ navigation }) => {
                   userName={userInfo.display_name}
                   userAvt={userInfo.avatar}
                   key={item.index}
+                  infoUser={a}
                 />
               );
             }}

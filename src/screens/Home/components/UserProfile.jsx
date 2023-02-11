@@ -17,6 +17,7 @@ import {
 import Post from "./Post";
 import Gradient from "react-native-css-gradient";
 import { FlatList } from "react-native-gesture-handler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const UserProfile = (props) => {
   const user_id = props.route.params.user_id;
@@ -24,11 +25,16 @@ const UserProfile = (props) => {
 
   const gradient = `linear-gradient(to top, black, white )`;
   const [userInfo, setUserInfo] = useState({});
+
+  const [a,setA] = useState({})
   useEffect(() => {
     const fetchData = async () => {
       let result = await apiContext.getInfoAnotherUser(user_id);
       // setPosts(result.data?.posts || []);
       setUserInfo(result.data);
+
+      let b = await AsyncStorage.getItem('info-user')
+      setA(JSON.parse(b))
     };
     fetchData().catch((err) => console.log(err));
   }, []);
@@ -135,6 +141,7 @@ const UserProfile = (props) => {
                   userName={userInfo.display_name}
                   userAvt={userInfo.avatar}
                   isFollow={isFollow}
+                  infoUser={a}
                   key={item.index}
                 />
               );

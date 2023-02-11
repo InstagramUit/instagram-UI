@@ -30,6 +30,7 @@
     "expo-status-bar": "~1.4.2",
     "expo-video-player": "^2.2.0",
     "moment": "^2.29.4",
+    "moment-timezone": "^0.5.40",
     "qs": "^6.11.0",
     "query-string": "^7.1.1",
     "react": "18.1.0",

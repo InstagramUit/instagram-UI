@@ -72,16 +72,14 @@ const ProfileSetting = () => {
     console.log(updateInfo);
     apiContext.updateInfoUser(updateInfo).then((res) => {
       console.log(res);
-      if (res?.message == "success") {
+      if (res?.mess == "success") {
         // đổi qua trang profile
         navigation.navigate("Profile");
       } else {
         Alert.alert("Có lỗi xảy ra.");
       }
     });
-    navigation.navigate("MainScreen", {
-      screen: "Home",
-    });
+
   };
   return (
     <SafeAreaView style={{ width: "100%", height: "100%", flex: 1 }}>
